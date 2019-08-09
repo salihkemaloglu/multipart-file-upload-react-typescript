@@ -31,3 +31,13 @@
     transform: rotate(360deg);
   }
 }
+.image-upload > input
+{
+    display: none;
+}
+
+.image-upload img
+{
+    width: 80px;
+    cursor: pointer;
+}
