@@ -1,13 +1,11 @@
-import React, { useCallback } from 'react';
-import './App.css';
-import Button from '@material-ui/core/Button';
-import { Segment, Image } from 'semantic-ui-react'
-import { Switch, TextField } from '@material-ui/core';
-import { useDropzone } from 'react-dropzone'
-var logo = require('./avatar3.png')
-var logo2 = require('./avatar2.png')
+import React, { useCallback } from "react";
+import "./App.css";
+import { Segment, Image } from "semantic-ui-react";
+import { Switch, TextField } from "@material-ui/core";
+import { useDropzone } from "react-dropzone";
+var logo = require("./avatar3.png");
+var logo2 = require("./avatar2.png");
 const App: React.FC = () => {
-
   // function getSteps() {
   //   return ['Publisher Information', 'File upload', 'Send file to FUTURE'];
   // }
@@ -42,16 +40,19 @@ const App: React.FC = () => {
 
   const [completed, setCompleted] = React.useState(0);
   const [buffer, setBuffer] = React.useState(10);
+  const [dropzoneStatus, setDropzoneStatus] = React.useState(false);
+  const [fileName, setFileName] = React.useState("");
+  const [fileSize, setFileSize] = React.useState(0);
 
   var states = {
     files: [],
-    fileName: '',
-    url: 'http://localhost:8900',
-    matget: '',
+    fileName: "",
+    url: "http://localhost:8900",
+    matget: "",
     fileSize: 0,
-    selectedFile: FormData,
+    selectedFile: FormData
   };
-  const progress = React.useRef(() => { });
+  const progress = React.useRef(() => {});
   React.useEffect(() => {
     progress.current = () => {
       if (completed > 100) {
@@ -78,110 +79,192 @@ const App: React.FC = () => {
   }, []);
   const [state, setState] = React.useState({
     checkedA: false,
-    checkedB: false,
+    checkedB: false
   });
 
-  const handleChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (name: string) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setState({ ...state, [name]: event.target.checked });
   };
-  const handleChangePublisher = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangePublisher = (name: string) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     console.log(event.target.value);
   };
-  const handleChangePublisherEmail = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangePublisherEmail = (name: string) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     console.log(event.target.value);
   };
   let data = new FormData();
 
   const onDrop = useCallback(acceptedFiles => {
-    if (acceptedFiles.length>=2){
-      alert("can upload multiple file ")
-    }else {
+    if (acceptedFiles.length >= 2) {
+      alert("can upload multiple file ");
+    } else {
       data.delete("file");
       data.append("file", acceptedFiles[0], acceptedFiles[0].name);
       var reader = new FileReader();
-      reader.onload = function () {
+      reader.onload = function() {
         var arrayBuffer = reader.result;
-        let currentArray = arrayBuffer === null ? JSON.parse("null") : arrayBuffer;
+        let currentArray =
+          arrayBuffer === null ? JSON.parse("null") : arrayBuffer;
         states.files = currentArray;
         states.fileName = acceptedFiles[0].name;
         states.fileSize = acceptedFiles[0].size;
         console.log("buffered");
+        setFileName(acceptedFiles[0].name);
+        setFileSize(acceptedFiles[0].size);
+        setDropzoneStatus(true);
       };
       reader.readAsArrayBuffer(acceptedFiles[0]);
     }
-  }, [])
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div className="App" style={{ marginLeft: '10%' }}>
-
-      <Segment placeholder color="black" style={{ width: '60%', marginLeft: '20%', marginTop: '2%' }} >
-        <div style={{ display: state.checkedB === false ? 'block' : 'none' }}>
+    <div className="App" style={{ marginLeft: "10%" }}>
+      <Segment
+        placeholder
+        color="black"
+        style={{ width: "60%", marginLeft: "20%", marginTop: "2%" }}
+      >
+        <div style={{ display: state.checkedB === false ? "block" : "none" }}>
           <div style={{ float: "left", marginTop: "4%" }}>
-            <Image src={logo2} size='small' circular />
+            <Image src={logo2} size="small" circular />
           </div>
-          <div style={{ float: "left", marginTop: "3%", marginLeft: "2%", textAlign: "left" }}>
+          <div
+            style={{
+              float: "left",
+              marginTop: "3%",
+              marginLeft: "2%",
+              textAlign: "left"
+            }}
+          >
             <TextField
               id="standard-name"
               label="Publisher"
               defaultValue="John wick"
-              onChange={handleChangePublisher('name')}
+              onChange={handleChangePublisher("name")}
               margin="normal"
-            /><br />
+            />
+            <br />
             <TextField
               id="standard-name"
               label="Information Email"
               defaultValue="john@wick.com"
-              onChange={handleChangePublisherEmail('name')}
+              onChange={handleChangePublisherEmail("name")}
               margin="normal"
-            /><br />
+            />
+            <br />
           </div>
           <div style={{ float: "right", marginRight: "1%" }}>
-            <strong>Anonym:<Switch
-              checked={state.checkedB}
-              onChange={handleChange('checkedB')}
-              value="checkedB"
-              color="primary"
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            /></strong>
+            <strong>
+              Anonym:
+              <Switch
+                checked={state.checkedB}
+                onChange={handleChange("checkedB")}
+                value="checkedB"
+                color="primary"
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
+            </strong>
           </div>
         </div>
-        <div style={{ display: state.checkedB === true ? 'block' : 'none' }}>
+        <div style={{ display: state.checkedB === true ? "block" : "none" }}>
           <div style={{ float: "left", marginTop: "4%" }}>
-            <Image src={logo} size='small' circular />
+            <Image src={logo} size="small" circular />
           </div>
-          <div style={{ float: "left", marginTop: "7%", marginLeft: "2%", textAlign: "left" }}>
-            <code><p><strong>Publisher: </strong>Anonymous User</p></code><br />
-            <code><p><strong>Information Email: </strong>Anonymous Email</p></code>
+          <div
+            style={{
+              float: "left",
+              marginTop: "7%",
+              marginLeft: "2%",
+              textAlign: "left"
+            }}
+          >
+            <code>
+              <p>
+                <strong>Publisher: </strong>Anonymous User
+              </p>
+            </code>
+            <br />
+            <code>
+              <p>
+                <strong>Information Email: </strong>Anonymous Email
+              </p>
+            </code>
           </div>
           <div style={{ float: "right", marginRight: "1%" }}>
-            <strong>Anonym:<Switch
-              checked={state.checkedB}
-              onChange={handleChange('checkedB')}
-              value="checkedB"
-              color="primary"
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            /></strong>
+            <strong>
+              Anonym:
+              <Switch
+                checked={state.checkedB}
+                onChange={handleChange("checkedB")}
+                value="checkedB"
+                color="primary"
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
+            </strong>
           </div>
         </div>
         {/* <Header icon>
           <LinearProgress color="secondary" variant="buffer" value={completed} valueBuffer={buffer} />
         </Header> */}
-        <div {...getRootProps()}>
+        <div
+          {...getRootProps()}
+          style={{ display: dropzoneStatus === false ? "block" : "none" }}
+        >
           <input {...getInputProps()} />
-          {
-            isDragActive ?
-              <p>Drop the files here ...</p> :
+          {isDragActive ? (
+            <p>Drop the files here ...</p>
+          ) : (
+            <h2 className="ui header">
+              <i className="large icons">
+                <i aria-hidden="true" className="cloud upload icon" />
+                <i aria-hidden="true" className="add corner icon" />
+              </i>
+              Add on Twitter
+            </h2>
+          )}
+        </div>
+        <div
+          {...getRootProps()}
+          style={{
+            display: dropzoneStatus === true ? "block" : "none",
+            float: "left",
+            width: "50%"
+          }}
+        >
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <p>Drop the files here ...</p>
+          ) : (
+            <div>
               <h2 className="ui header">
                 <i className="large icons">
-                  <i aria-hidden="true" className="cloud upload icon"></i>
-                  <i aria-hidden="true" className="add corner icon"></i>
+                  <i aria-hidden="true" className="cloud upload icon" />
+                  <i aria-hidden="true" className="add corner icon" />
                 </i>
                 Add on Twitter
-        </h2>
-          }
+              </h2>
+              <code>
+                <p>
+                  <strong>File Name: </strong>
+                </p>
+                {fileName}
+              </code>
+              <br />
+              <code>
+                <p>
+                  <strong>File Size: </strong>
+                  {fileSize}
+                </p>
+              </code>
+            </div>
+          )}
         </div>
-
       </Segment>
       {/* <Segment placeholder color="grey" style={{ width: '60%', marginLeft: '20%', marginTop: '-1%' }}>
         <Header icon>
@@ -228,10 +311,8 @@ const App: React.FC = () => {
             )}
         </div>
       </div> */}
-
-
     </div>
   );
-}
+};
 
 export default App;
