@@ -1,316 +1,158 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import "./App.css";
-import { Segment, Image } from "semantic-ui-react";
+import { Segment, Image, Progress, Message } from "semantic-ui-react";
 import { Switch, TextField } from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
-var logo = require("./avatar3.png");
-var logo2 = require("./avatar2.png");
+var avatarTest = require("./avatar3.png");
+var avatarAnonym = require("./avatar2.png");
 const App: React.FC = () => {
-  // function getSteps() {
-  //   return ['Publisher Information', 'File upload', 'Send file to FUTURE'];
-  // }
-
-  // function getStepContent(stepIndex: any) {
-  //   switch (stepIndex) {
-  //     case 0:
-  //       return 'Select campaign settings...';
-  //     case 1:
-  //       return 'What is an ad group anyways?';
-  //     case 2:
-  //       return 'This is the bit I really care about!';
-  //     default:
-  //       return 'Uknown stepIndex';
-  //   }
-  // }
-
-  // const [activeStep, setActiveStep] = React.useState(0);
-  // const steps = getSteps();
-
-  // function handleNext() {
-  //   setActiveStep(prevActiveStep => prevActiveStep + 1);
-  // }
-
-  // function handleBack() {
-  //   setActiveStep(prevActiveStep => prevActiveStep - 1);
-  // }
-
-  // function handleReset() {
-  //   setActiveStep(0);
-  // }
-
-  const [completed, setCompleted] = React.useState(0);
-  const [buffer, setBuffer] = React.useState(10);
-  const [dropzoneStatus, setDropzoneStatus] = React.useState(false);
-  const [fileName, setFileName] = React.useState("");
-  const [fileSize, setFileSize] = React.useState(0);
-
-  var states = {
-    files: [],
-    fileName: "",
-    url: "http://localhost:8900",
-    matget: "",
-    fileSize: 0,
-    selectedFile: FormData
-  };
-  const progress = React.useRef(() => {});
-  React.useEffect(() => {
-    progress.current = () => {
-      if (completed > 100) {
-        setCompleted(0);
-        setBuffer(10);
-      } else {
-        const diff = Math.random() * 10;
-        const diff2 = Math.random() * 10;
-        setCompleted(completed + diff);
-        setBuffer(completed + diff + diff2);
-      }
-    };
-  });
-
-  React.useEffect(() => {
-    function tick() {
-      progress.current();
-    }
-    const timer = setInterval(tick, 500);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-  const [state, setState] = React.useState({
+  const [percent, setPercent] = useState(80);
+  const [completed, setCompleted] = useState(false);
+  const [dropzoneStatus, setDropzoneStatus] = useState("upload");
+  const [state, setState] = useState({
     checkedA: false,
-    checkedB: false
+    checkedB: false,
   });
-
-  const handleChange = (name: string) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setState({ ...state, [name]: event.target.checked });
-  };
-  const handleChangePublisher = (name: string) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    console.log(event.target.value);
-  };
-  const handleChangePublisherEmail = (name: string) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    console.log(event.target.value);
-  };
-  let data = new FormData();
-
+  const [file, setFile] = useState({
+    fileData: [],
+    fileName: '',
+    fileSize: '',
+  });
+  // let data = new FormData();
+  // data.delete("file");
+  // data.append("file", acceptedFiles[0], acceptedFiles[0].name);
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length >= 2) {
-      alert("can upload multiple file ");
+      alert("can not upload multiple file ")
     } else {
-      data.delete("file");
-      data.append("file", acceptedFiles[0], acceptedFiles[0].name);
       var reader = new FileReader();
-      reader.onload = function() {
+      reader.onload = function () {
         var arrayBuffer = reader.result;
-        let currentArray =
-          arrayBuffer === null ? JSON.parse("null") : arrayBuffer;
-        states.files = currentArray;
-        states.fileName = acceptedFiles[0].name;
-        states.fileSize = acceptedFiles[0].size;
-        console.log("buffered");
-        setFileName(acceptedFiles[0].name);
-        setFileSize(acceptedFiles[0].size);
-        setDropzoneStatus(true);
+        let currentArray = arrayBuffer === null ? JSON.parse("null") : arrayBuffer;
+        var fileSize = readableBytes(acceptedFiles[0].size);
+        if (fileSize >= '50 MB')
+          alert("File size  can not be bigger than 50 MB")
+        else {
+          setFile({ fileData: currentArray, fileName: acceptedFiles[0].name, fileSize: readableBytes(acceptedFiles[0].size) });
+          setDropzoneStatus("edit");
+        }
       };
       reader.readAsArrayBuffer(acceptedFiles[0]);
     }
-  }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  }, [])
+  const { getRootProps, getInputProps } = useDropzone({ onDrop })
+  function readableBytes(bytes: number) {
+    var i = Math.floor(Math.log(bytes) / Math.log(1024)),
+      sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+  }
+  const handleChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [name]: event.target.checked });
+  };
+  const handleChangePublisher = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+  };
+  const handleChangePublisherEmail = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+  };
 
+  function CreateTimeCapsule() {
+    setCompleted(true);
+  }
   return (
-    <div className="App" style={{ marginLeft: "10%" }}>
-      <Segment
-        placeholder
-        color="black"
-        style={{ width: "60%", marginLeft: "20%", marginTop: "2%" }}
-      >
-        <div style={{ display: state.checkedB === false ? "block" : "none" }}>
-          <div style={{ float: "left", marginTop: "4%" }}>
-            <Image src={logo2} size="small" circular />
-          </div>
-          <div
-            style={{
-              float: "left",
-              marginTop: "3%",
-              marginLeft: "2%",
-              textAlign: "left"
-            }}
-          >
-            <TextField
-              id="standard-name"
-              label="Publisher"
-              defaultValue="John wick"
-              onChange={handleChangePublisher("name")}
-              margin="normal"
-            />
-            <br />
-            <TextField
-              id="standard-name"
-              label="Information Email"
-              defaultValue="john@wick.com"
-              onChange={handleChangePublisherEmail("name")}
-              margin="normal"
-            />
-            <br />
-          </div>
-          <div style={{ float: "right", marginRight: "1%" }}>
-            <strong>
-              Anonym:
-              <Switch
+    <div className="App" style={{ marginLeft: '10%' }}>
+      <div style={{ display: completed === false ? 'block' : 'none' }}>
+        <Segment placeholder color="black" style={{ width: '75%', marginLeft: '10%', marginTop: '2%' }} >
+          <div style={{ display: state.checkedB === false ? 'block' : 'none' }}>
+            <div style={{ float: "left"}}>
+              <Image src={avatarTest} size='small' circular />
+            </div>
+            <div style={{ float: "left", marginLeft: "2%", textAlign: "left" }}>
+              <TextField
+                id="standard-name"
+                label="Publisher"
+                defaultValue="John wick"
+                onChange={handleChangePublisher('name')}
+                margin="normal"
+              /><br />
+              <TextField
+                id="standard-name"
+                label="Information Email"
+                defaultValue="john@wick.com"
+                onChange={handleChangePublisherEmail('name')}
+                margin="normal"
+              /><br />
+            </div>
+            <div style={{ float: "right", marginRight: "1%" }}>
+              <strong>Anonym:<Switch
                 checked={state.checkedB}
-                onChange={handleChange("checkedB")}
+                onChange={handleChange('checkedB')}
                 value="checkedB"
                 color="primary"
-                inputProps={{ "aria-label": "primary checkbox" }}
-              />
-            </strong>
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              /></strong>
+            </div>
           </div>
-        </div>
-        <div style={{ display: state.checkedB === true ? "block" : "none" }}>
-          <div style={{ float: "left", marginTop: "4%" }}>
-            <Image src={logo} size="small" circular />
-          </div>
-          <div
-            style={{
-              float: "left",
-              marginTop: "7%",
-              marginLeft: "2%",
-              textAlign: "left"
-            }}
-          >
-            <code>
-              <p>
-                <strong>Publisher: </strong>Anonymous User
-              </p>
-            </code>
-            <br />
-            <code>
-              <p>
-                <strong>Information Email: </strong>Anonymous Email
-              </p>
-            </code>
-          </div>
-          <div style={{ float: "right", marginRight: "1%" }}>
-            <strong>
-              Anonym:
-              <Switch
+          <div style={{ display: state.checkedB === true ? 'block' : 'none' }}>
+            <div style={{ float: "left" }}>
+              <Image src={avatarAnonym} size='small' circular />
+            </div>
+            <div style={{ float: "left", marginTop: "3%", marginLeft: "2%", textAlign: "left" }}>
+              <code><p><strong>Publisher: </strong>Anonymous User</p></code><br />
+              <code><p><strong>Information Email: </strong>Anonymous Email</p></code>
+            </div>
+            <div style={{ float: "right", marginRight: "1%" }}>
+              <strong>Anonym:<Switch
                 checked={state.checkedB}
-                onChange={handleChange("checkedB")}
+                onChange={handleChange('checkedB')}
                 value="checkedB"
                 color="primary"
-                inputProps={{ "aria-label": "primary checkbox" }}
-              />
-            </strong>
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              /></strong>
+            </div>
           </div>
-        </div>
-        {/* <Header icon>
-          <LinearProgress color="secondary" variant="buffer" value={completed} valueBuffer={buffer} />
-        </Header> */}
-        <div
-          {...getRootProps()}
-          style={{ display: dropzoneStatus === false ? "block" : "none" }}
-        >
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p>Drop the files here ...</p>
-          ) : (
+          <div className="line_crate" />
+          <div {...getRootProps()} style={{ display: dropzoneStatus === "upload" ? "block" : "none", cursor: "pointer" }}>
+            <input {...getInputProps()} />
+
             <h2 className="ui header">
               <i className="large icons">
                 <i aria-hidden="true" className="cloud upload icon" />
                 <i aria-hidden="true" className="add corner icon" />
               </i>
-              Add on Twitter
-            </h2>
-          )}
-        </div>
-        <div
-          {...getRootProps()}
-          style={{
-            display: dropzoneStatus === true ? "block" : "none",
-            float: "left",
-            width: "50%"
-          }}
-        >
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p>Drop the files here ...</p>
-          ) : (
-            <div>
+              Add file
+        </h2>
+          </div>
+          <div style={{ display: dropzoneStatus === "edit" ? "block" : "none" }}>
+            <div {...getRootProps()} style={{ float: "left", cursor: "pointer", width: "50%" }}>
+              <input {...getInputProps()} />
               <h2 className="ui header">
                 <i className="large icons">
                   <i aria-hidden="true" className="cloud upload icon" />
                   <i aria-hidden="true" className="add corner icon" />
                 </i>
-                Add on Twitter
-              </h2>
-              <code>
-                <p>
-                  <strong>File Name: </strong>
-                </p>
-                {fileName}
-              </code>
-              <br />
-              <code>
-                <p>
-                  <strong>File Size: </strong>
-                  {fileSize}
-                </p>
-              </code>
+                Edit file
+                </h2>
             </div>
-          )}
-        </div>
-      </Segment>
-      {/* <Segment placeholder color="grey" style={{ width: '60%', marginLeft: '20%', marginTop: '-1%' }}>
-        <Header icon>
-          <Icon className='pdf file outline' />
-          No documents are listed for this customer.
-          <LinearProgress color="secondary" variant="buffer" value={completed} valueBuffer={buffer} />
-        </Header>
-        <Button color="primary">Add Document</Button>
-      </Segment>
-      <Segment placeholder color="green" style={{ width: '60%', marginLeft: '20%', marginTop: '-1%'}} >
-        <p>end</p>
-      </Segment> */}
-      {/* <div style={{ marginLeft: '5%' }}>
-        <Stepper activeStep={activeStep} alternativeLabel style={{ color: 'black' }} color="black">
-          {steps.map(label => (
-            <Step key={label} style={{ color: 'black' }} color="black">
-              <StepLabel style={{ color: 'black' }} color="black">{label}</StepLabel >
-            </Step>
-          ))}
-        </Stepper>
-        <div >
-          {activeStep === steps.length ? (
-            <div>
-              <Typography >All steps completed</Typography>
-              <Button onClick={handleReset}>Reset</Button>
+
+            <div style={{ float: "left", textAlign: "left", width: "50%", marginTop: "4%" }}>
+              <code><p><strong>File Name: </strong>{file.fileName}</p></code><br />
+              <code><p><strong>File Size: </strong>{file.fileSize}</p></code>
             </div>
-          ) : (
-              <div>
-                <Typography className={classes.instructions} style={{ color: 'black' }}>{getStepContent(activeStep)}</Typography>
-                <div>
-                  <Button
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
+          </div>
+        </Segment>
+        <button style={{ width: '75%', marginLeft: '10%' }} className="ui fluid secondary  button" onClick={CreateTimeCapsule}>Send Time Capsule to Future</button>
+      </div>
+      <div style={{ display: completed === true ? 'block' : 'none' }}>
+        <Segment placeholder color="black" style={{ width: '75%', marginLeft: '10%', marginTop: '2%' }} >
+          <Progress percent={percent} progress indicating />
 
-                  >
-                    Back
-              </Button>
-                  <Button variant="contained" color="primary" onClick={handleNext}>
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                  </Button>
+          <div style={{}}>
+            <Message info header='Please wait ultil file upload' />
+          </div>
+        </Segment>
+      </div>
 
-                </div>
-              </div>
-            )}
-        </div>
-      </div> */}
     </div>
   );
 };
