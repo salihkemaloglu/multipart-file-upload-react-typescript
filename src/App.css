@@ -48,3 +48,15 @@
   margin: auto;
   margin-top: 1%;
 }
+.file_upload_zone {
+  display: inline-block;
+  width: 100%;
+  padding: 120px 0 0 0;
+  height: 100px;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: url('./cloud-arrow-up.png') center center no-repeat;
+  border-radius: 20px;
+}
