@@ -31,18 +31,16 @@
     transform: rotate(360deg);
   }
 }
-.image-upload > input
-{
-    display: none;
+.image-upload > input {
+  display: none;
 }
 
-.image-upload img
-{
-    width: 80px;
-    cursor: pointer;
+.image-upload img {
+  width: 80px;
+  cursor: pointer;
 }
 
-.line_crate{
+.line_crate {
   border: 1px dashed #000;
   width: 100%;
   margin: auto;
@@ -57,6 +55,37 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  background: url('./cloud-arrow-up.png') center center no-repeat;
+  background: url("./cloud-arrow-up.png") center center no-repeat;
   border-radius: 20px;
 }
+
+/* Mobile Styles */
+@media only screen and (max-width: 400px) {
+
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 961px) {
+  .pickers {
+    float: right;
+    margin-right: 8%;
+  }
+  .App {
+    margin-left: 10%;
+  }
+
+  .time_capsule_block {
+    width: 86% ;
+  }
+  .button{
+    width: 86% !important;
+    margin-left: 10%;
+  }
+}
+
+

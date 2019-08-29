@@ -93,126 +93,122 @@ const App: React.FC = () => {
     setCompleted(true);
   }
   return (
-    <div className="App" style={{ marginLeft: '10%' }}>
+    <div className="App" style={{ paddingTop: '2%' }}>
       <div style={{ display: completed === false ? 'block' : 'none' }}>
-        <Segment placeholder color="black" style={{ width: '75%', marginLeft: '10%', marginTop: '2%' }} >
-          <div style={{ display: state.checkedB === false ? 'block' : 'none' }}>
-            <div style={{ float: "left" }}>
-              <Image src={avatarTest} size='small' circular />
-            </div>
-            <div style={{ float: "left", marginLeft: "2%", textAlign: "left" }}>
-              <TextField
-                id="standard-name"
-                label="Publisher"
-                defaultValue="John wick"
-                onChange={handleChangePublisher('name')}
-                margin="normal"
-              /><br />
-              <TextField
-                id="standard-name"
-                label="Information Email"
-                defaultValue="john@wick.com"
-                onChange={handleChangePublisherEmail('name')}
-                margin="normal"
-              /><br />
-               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid container justify="space-around">
-        <KeyboardDatePicker
-          disableToolbar
-          variant="inline"
-          color="black"
-          format="MM/dd/yyyy"
-          margin="normal"
-          id="date-picker-inline"
-          label="Date picker inline"
-          value={selectedDate}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-        <KeyboardDatePicker
-          margin="normal"
-          color="black"
-          id="date-picker-dialog"
-          label="Date picker dialog"
-          format="MM/dd/yyyy"
-          value={selectedDate}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-        <KeyboardTimePicker
-        clearable
-          margin="normal"
-          id="time-picker"
-          label="24 hours"
-          ampm={false}
-          value={selectedDate}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change time',
-          }}
-        />
-      </Grid>
-    </MuiPickersUtilsProvider>
-              <Fragment>
-                {/* <DateTimePicker
-                  label="DateTimePicker"
-                  inputVariant="outlined"
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                />
+        <div className="time_capsule_block" >
+          <Segment placeholder color="black"  >
+            <div style={{ display: state.checkedB === false ? 'block' : 'none' }}>
+              <div style={{ float: "left" }}>
+                <Image src={avatarTest} size='small' circular />
+              </div>
+              <div style={{ float: "right", marginRight: "1%" }}>
+                <strong>Be Anonym:<Switch
+                  checked={state.checkedB}
+                  onChange={handleChange('checkedB')}
+                  value="checkedB"
+                  color="primary"
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                /></strong>
+              
+              </div>
+                <div style={{ float: "left", marginLeft: "2%", textAlign: "left" }}>
+                  <TextField
+                    id="standard-name"
+                    label="Publisher"
+                    defaultValue="John wick"
+                    onChange={handleChangePublisher('name')}
+                    margin="normal"
+                  /><br />
+                  <TextField
+                    id="standard-name"
+                    label="Information Email"
+                    defaultValue="john@wick.com"
+                    onChange={handleChangePublisherEmail('name')}
+                    margin="normal"
+                  /><br />
+                </div>
+                <div className="pickers">
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid container justify="space-around">
+                      <KeyboardDatePicker
+                        margin="normal"
+                        color="black"
+                        id="date-picker-dialog"
+                        label="Date picker dialog"
+                        format="dd/MM/yyyy"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        KeyboardButtonProps={{
+                          'aria-label': 'change date',
+                        }}
+                      />
+                      <KeyboardTimePicker
+                        clearable
+                        margin="normal"
+                        id="time-picker"
+                        label="24 hours"
+                        ampm={false}
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        KeyboardButtonProps={{
+                          'aria-label': 'change time',
+                        }}
+                      />
+                    </Grid>
+                  </MuiPickersUtilsProvider>
+                </div>
 
-                <DateTimePicker
-                  autoOk
-                  ampm={false}
-                  disableFuture
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                  label="24h clock"
-                />
-
-                <DateTimePicker
-                  value={selectedDate}
-                  disablePast
-                  onChange={handleDateChange}
-                  label="With Today Button"
-                  showTodayButton
-                /> */}
-              </Fragment>
-            </div>
-            <div style={{ float: "right", marginRight: "1%" }}>
-              <strong>Anonym:<Switch
-                checked={state.checkedB}
-                onChange={handleChange('checkedB')}
-                value="checkedB"
-                color="primary"
-                inputProps={{ 'aria-label': 'primary checkbox' }}
-              /></strong>
-            </div>
-          </div>
-          <div style={{ display: state.checkedB === true ? 'block' : 'none' }}>
-            <div style={{ float: "left" }}>
-              <Image src={avatarAnonym} size='small' circular />
-            </div>
-            <div style={{ float: "left", marginTop: "3%", marginLeft: "2%", textAlign: "left" }}>
-              <code><p><strong>Publisher: </strong>Anonymous User</p></code><br />
-              <code><p><strong>Information Email: </strong>Anonymous Email</p></code>
-            </div>
-            <div style={{ float: "right", marginRight: "1%" }}>
-              <strong>Anonym:<Switch
-                checked={state.checkedB}
-                onChange={handleChange('checkedB')}
-                value="checkedB"
-                color="primary"
-                inputProps={{ 'aria-label': 'primary checkbox' }}
-              /></strong>
-            </div>
-          </div>
-          <div className="line_crate" />
-          {/* <div {...getRootProps()} style={{ display: dropzoneStatus === "upload" ? "block" : "none", cursor: "pointer" }}>
+              </div>
+              <div style={{ display: state.checkedB === true ? 'block' : 'none' }}>
+                <div style={{ float: "left" }}>
+                  <Image src={avatarAnonym} size='small' circular />
+                </div>
+                <div style={{ float: "left", marginTop: "3%", marginLeft: "2%", textAlign: "left" }}>
+                  <code><p><strong>Publisher: </strong>Anonymous User</p></code><br />
+                  <code><p><strong>Information Email: </strong>Anonymous Email</p></code>
+                </div>
+                <div style={{ float: "right", marginRight: "1%" }}>
+                  <strong>Anonym:<Switch
+                    checked={state.checkedB}
+                    onChange={handleChange('checkedB')}
+                    value="checkedB"
+                    color="primary"
+                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                  /></strong>
+                  </div>
+                  <div className="pickers">
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <Grid container justify="space-around">
+                        <KeyboardDatePicker
+                          margin="normal"
+                          color="black"
+                          id="date-picker-dialog"
+                          label="Date picker dialog"
+                          format="dd/MM/yyyy"
+                          value={selectedDate}
+                          onChange={handleDateChange}
+                          KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                          }}
+                        />
+                        <KeyboardTimePicker
+                          clearable
+                          margin="normal"
+                          id="time-picker"
+                          label="24 hours"
+                          ampm={false}
+                          value={selectedDate}
+                          onChange={handleDateChange}
+                          KeyboardButtonProps={{
+                            'aria-label': 'change time',
+                          }}
+                        />
+                      </Grid>
+                    </MuiPickersUtilsProvider>
+                  </div>
+                </div>
+              <div className="line_crate" />
+              {/* <div {...getRootProps()} style={{ display: dropzoneStatus === "upload" ? "block" : "none", cursor: "pointer" }}>
             <input {...getInputProps()} />
             <h2 className="ui header">
               <i className="large icons">
@@ -222,11 +218,11 @@ const App: React.FC = () => {
               Add file
         </h2>
           </div> */}
-          <div style={{ display: dropzoneStatus === "upload" ? "block" : "none" }}>
-            <input className="file_upload_zone" type="file" onChange={(e: any) => handleChangeFile(e.target.files)} />
-          </div>
-          <div style={{ display: dropzoneStatus === "edit" ? "block" : "none" }}>
-            {/* <div {...getRootProps()} style={{ float: "left", cursor: "pointer", width: "50%" }}>
+              <div style={{ display: dropzoneStatus === "upload" ? "block" : "none" }}>
+                <input className="file_upload_zone" type="file" onChange={(e: any) => handleChangeFile(e.target.files)} />
+              </div>
+              <div style={{ display: dropzoneStatus === "edit" ? "block" : "none" }}>
+                {/* <div {...getRootProps()} style={{ float: "left", cursor: "pointer", width: "50%" }}>
               <input {...getInputProps()} />
               <h2 className="ui header">
                 <i className="large icons">
@@ -236,26 +232,28 @@ const App: React.FC = () => {
                 Edit file
                 </h2>
             </div> */}
-            <input style={{ float: "left", cursor: "pointer", width: "50%" }} className="file_upload_zone" type="file" onChange={(e: any) => handleChangeFile(e.target.files)} />
-            <div style={{ float: "left", textAlign: "left", width: "50%", marginTop: "4%" }}>
-              <code><p><strong>File Name: </strong>{file.fileName}</p></code><br />
-              <code><p><strong>File Size: </strong>{file.fileSize}</p></code>
+                <input style={{ float: "left", cursor: "pointer", width: "50%" }} className="file_upload_zone" type="file" onChange={(e: any) => handleChangeFile(e.target.files)} />
+                <div style={{ float: "left", textAlign: "left", width: "50%", marginTop: "4%" }}>
+                  <code><p><strong>File Name: </strong>{file.fileName}</p></code><br />
+                  <code><p><strong>File Size: </strong>{file.fileSize}</p></code>
+                </div>
+              </div>
+          </Segment>
+        </div>
+
+          <button style={{ marginTop: '1%' }} className="ui fluid secondary  button" onClick={CreateTimeCapsule}>Send Time Capsule to Future</button>
+        </div>
+        <div style={{ display: completed === true ? 'block' : 'none' }}>
+          <Segment placeholder color="black" style={{ width: '75%', marginLeft: '10%', marginTop: '2%' }} >
+            <Progress percent={percent} progress indicating />
+            <div style={{}}>
+              <Message info header='Please wait ultil file upload' />
             </div>
-          </div>
-        </Segment>
-        <button style={{ width: '75%', marginLeft: '10%' }} className="ui fluid secondary  button" onClick={CreateTimeCapsule}>Send Time Capsule to Future</button>
-      </div>
-      <div style={{ display: completed === true ? 'block' : 'none' }}>
-        <Segment placeholder color="black" style={{ width: '75%', marginLeft: '10%', marginTop: '2%' }} >
-          <Progress percent={percent} progress indicating />
-          <div style={{}}>
-            <Message info header='Please wait ultil file upload' />
-          </div>
-        </Segment>
-      </div>
+          </Segment>
+        </div>
 
-    </div>
-  );
-};
-
-export default App;
+      </div>
+      );
+    };
+    
+    export default App;
