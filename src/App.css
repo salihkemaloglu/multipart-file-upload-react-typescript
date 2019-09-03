@@ -78,66 +78,109 @@
 
 /* Mobile Styles */
 @media only screen and (max-width: 400px) {
-  .avatar-image{
+  .avatar-image {
     float: left;
     width: 30%;
   }
-  .label-text{
+  .label-text {
+    margin-top: 31%;
+  }
+  .pickers-anonym {
     float: left;
-    margin-left: -21%;
-    text-align: left;
-    margin-top: 16%;
+    margin-left: 1px;
+    margin-top: 2px;
+  }
+  .pickers-label-anonym {
+    float: left;
+    margin-top: -5%;
+    width: 31%;
+    margin-left: 2%;
   }
   .pickers {
-    margin-top: 18px;
-    float: right;
-    margin-left: 4px;
-  }
-  .pickers_label{
     float: left;
-    margin-top: -3%;
-    margin-left: 2%;
-
+    margin-left: 1px;
+    margin-top: 4px;
+  }
+  .pickers-label {
+    float: left;
+    margin-top: -4%;
+    width: 31%;
+    margin-left: -2%;
+  }
+  .label-text-publisher {
+    float: left;
+    margin-left: -7px;
+  }
+  .label-text-email {
+    float: right;
+    margin-right: -10px;
+    margin-top: -19px;
+  }
+  .anonym-switch {
+    float: right;
+    margin-right: 1%;
+    margin-top: -49%;
+  }
+  .email-anonym{
+    margin-top: 2% !important;
   }
 }
 
 /* Tablet Styles */
 @media only screen and (min-width: 401px) and (max-width: 960px) {
+  .pickers-anonym {
+    margin-top: 92px;
+    float: left;
+    margin-left: -86px;
+  }
+  .pickers-label-anonym {
+    float: left;
+    margin-top: 10%;
+    margin-left: -35%;
+  }
   .pickers {
-    margin-top: 18px;
-    float: right;
+    margin-top: 33px;
+    float: left;
     margin-left: 4px;
   }
-  .pickers_label{
+  .pickers-label {
     float: left;
-    margin-top: -3%;
+    margin-top: 7%;
     margin-left: 2%;
-
   }
-  .avatar-image{
+  .avatar-image {
     float: left;
   }
-  .label-text{
+  .label-text {
     float: left;
     margin-left: 2%;
-    text-align:left;
+    text-align: left;
   }
 }
 
 /* Desktop Styles */
 @media only screen and (min-width: 961px) {
-  .pickers {
+  .pickers-anonym {
     margin-left: 5px;
-    float: right;
-    margin-top: 17px;
-  
+    float: left;
+    margin-top: 33px;
   }
-  .pickers_label{
+  .pickers-label-anonym {
     float: left;
     margin-left: 1%;
     margin-top: 16px;
   }
-  .avatar-image{
+  .pickers {
+    margin-left: 5px;
+    float: left;
+    margin-top: 33px;
+  }
+  .pickers-label {
+    float: left;
+    margin-left: 1%;
+    margin-top: 16px;
+  }
+  .avatar-image {
     float: left;
   }
   .App {
@@ -151,9 +194,9 @@
     width: 86% !important;
     margin-left: 10%;
   }
-  .label-text{
+  .label-text {
     float: left;
     margin-left: 2%;
-    text-align:left;
+    text-align: left;
   }
 }
