@@ -1,29 +1,27 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Segment, Image, Progress, Message } from "semantic-ui-react";
+import { Segment, Image, Progress, Message, Popup, Icon } from "semantic-ui-react";
 import { Switch, TextField } from "@material-ui/core";
 import DatePicker, { registerLocale } from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import CryptoJS from 'crypto-js';
 import { tr } from 'date-fns/esm/locale';
-import {
-  createStyles,
-  fade,
-  Theme,
-  withStyles,
-  makeStyles,
-  createMuiTheme,
-} from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
-import { red } from '@material-ui/core/colors';
-import { ThemeProvider } from '@material-ui/styles';
 registerLocale("tr", tr);
 var avatarTest = require("./avatar3.png");
 var avatarAnonym = require("./avatar2.png");
 const App: React.FC = () => {
   const [percent, setPercent] = useState(80);
-  const [completed, setCompleted] = useState(false);
+  const [disabledStatus, setDisabledStatus] = useState(false);
   const [dropzoneStatus, setDropzoneStatus] = useState("upload");
-  const [inputType, setInputType] = useState("success");
+  const [fileHash, setFileHash] = useState("");
+  const [inputPublisherType, setInputPublisherType] = useState({
+    validationStatus: false,
+    helperText: ""
+  });
+  const [inputEmailType, setInputEmailType] = useState({
+    validationStatus: false,
+    helperText: ""
+  });
   const [state, setState] = useState({
     checkedA: false,
     checkedB: false,
@@ -46,19 +44,26 @@ const App: React.FC = () => {
   const handleChangePublisher = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
     if (event.target.value.length == 0) {
-      setInputType("error");
+      setInputPublisherType({ validationStatus: true, helperText: "Publisher can not be empty" });
     } else {
-      setInputType("success");
+      setInputPublisherType({ validationStatus: false, helperText: "" });
     }
   };
   const handleChangePublisherEmail = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
+    if (event.target.value.length == 0) {
+      setInputEmailType({ validationStatus: true, helperText: "Information Email can not be empty" });
+    } else {
+      setInputEmailType({ validationStatus: false, helperText: "" });
+    }
   };
   function handleChangeFile(selectorFiles: FileList) {
     var reader = new FileReader();
     reader.onload = function () {
       var arrayBuffer = reader.result;
       let currentArray = arrayBuffer === null ? JSON.parse("null") : arrayBuffer;
+      var encrypted = CryptoJS.SHA256(currentArray);
+      setFileHash(encrypted.toString());
       var fileSize = readableBytes(selectorFiles[0].size);
       if (fileSize >= '50 MB')
         alert("File size  can not be bigger than 50 MB")
@@ -72,48 +77,16 @@ const App: React.FC = () => {
     reader.readAsArrayBuffer(selectorFiles[0]);
   }
   function CreateTimeCapsule() {
-    setCompleted(true);
+    setDropzoneStatus("progress")
+    setDisabledStatus(true);
   }
 
   const [startDate, setStartDate] = React.useState<Date | null>(
     new Date('2014-08-18T21:11:54'),
   );
-  document.addEventListener('DOMContentLoaded', (event) => {
-    (document.getElementById("standard-full-width") as HTMLInputElement).style.color = 'black';
-    (document.getElementById("standard-full-width2") as HTMLInputElement).style.color = 'black';
-
-
-  });
-
-  const ValidationTextField = withStyles({
-    root: {
-      '& input:invalid + fieldset': {
-        borderColor: 'red',
-        borderWidth: 2,
-      },
-      '& input:valid:focus + fieldset': {
-        borderLeftWidth: 6,
-        padding: '4px !important', // override inline-style
-      },
-      color: 'red',
-    },
-  })(TextField);
-  const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-      root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-      },
-      margin: {
-        margin: theme.spacing(1),
-      },
-    }),
-  );
-  const classes = useStyles();
-
   return (
     <div className="App" style={{ paddingTop: '2%' }}>
-      <div style={{ display: completed === false ? 'block' : 'none' }}>
+      <div>
         <div className="time_capsule_block" >
           <Segment placeholder color="black"  >
             <div style={{ display: state.checkedB === false ? 'block' : 'none' }}>
@@ -123,54 +96,47 @@ const App: React.FC = () => {
               <div style={{ float: "right", marginRight: "1%" }}>
                 <strong>Be Anonym:<Switch
                   checked={state.checkedB}
+                  disabled={disabledStatus}
                   onChange={handleChange('checkedB')}
                   value="checkedB"
                   color="primary"
                   inputProps={{ 'aria-label': 'primary checkbox' }}
                 /></strong>
-
               </div>
               <div className="label-text" >
-                <div className="label-text-publisher" >
+                <div className="label-text-publisher">
                   <TextField
                     required
+                    disabled={disabledStatus}
+                    error={inputPublisherType.validationStatus}
                     id="standard-name"
                     label="Publisher"
                     defaultValue="John wick"
                     onChange={handleChangePublisher('name')}
                     margin="normal"
+                    helperText={inputPublisherType.helperText}
                   />
-                </div>
-                <form className={classes.root} noValidate>
-                  <ValidationTextField
-                    className={classes.margin}
-                    label="CSS validation style"
-                    required
-                    variant="outlined"
-                    defaultValue="Success"
-                    id="validation-outlined-input"
-                  /></form><br />
+                </div><br />
                 <div className="label-text-email">
                   <TextField
+                    required
+                    disabled={disabledStatus}
+                    error={inputEmailType.validationStatus}
                     id="standard-name"
                     label="Information Email"
                     defaultValue="john@wick.com"
                     onChange={handleChangePublisherEmail('name')}
                     margin="normal"
+                    helperText={inputEmailType.helperText}
                   />
                 </div><br />
               </div>
               <div className="pickers-label">
-                <TextField
-                  disabled
-                  id="standard-full-width"
-                  defaultValue="Date of opening:"
-                  margin="normal"
-                  inputProps={{ 'aria-label': 'bare' }}
-                />
+                <code><strong>Date: </strong></code>
               </div>
               <div className="pickers">
                 <DatePicker
+                  disabled={disabledStatus}
                   selected={startDate}
                   onChange={date => setStartDate(date)}
                   showTimeSelect
@@ -182,12 +148,23 @@ const App: React.FC = () => {
                   dateFormat="d MMMM yyyy h:mm "
                 />
               </div>
+              <div className="tooltip">
+                <Popup
+                  trigger={<Icon circular name='help' />}
+                  content="Date of opening to capsule."
+                  basic
+                />
+              </div>
+              <div className="file-label" style={{ display: fileHash !== "" ? 'block' : 'none' }}>
+                <code><strong>File Hash: </strong></code>
+              </div>
+              <p className="hash-text">{fileHash}</p>
             </div>
             <div style={{ display: state.checkedB === true ? 'block' : 'none' }}>
               <div className="avatar-image" style={{ float: "left" }}>
                 <Image src={avatarAnonym} size='small' circular />
               </div>
-              <div style={{ float: "left", marginTop: "3%", marginLeft: "2%", textAlign: "left" }}>
+              <div className="publisher-info-anonym">
                 <code><p style={{ marginTop: "2%" }}><strong>Publisher: </strong>Anonymous User</p></code>
                 <code><p className="email-anonym" style={{ marginTop: "5%" }}><strong>Information Email: </strong>Anonymous Email</p></code>
               </div>
@@ -201,13 +178,7 @@ const App: React.FC = () => {
                 /></strong>
               </div>
               <div className="pickers-label-anonym">
-                <TextField
-                  disabled
-                  id="standard-full-width2"
-                  defaultValue="Date of opening:"
-                  margin="normal"
-                  inputProps={{ 'aria-label': 'bare' }}
-                />
+                <code><strong>Date: </strong></code>
               </div>
               <div className="pickers-anonym">
                 <DatePicker
@@ -222,6 +193,17 @@ const App: React.FC = () => {
                   dateFormat="d MMMM yyyy h:mm "
                 />
               </div>
+              <div className="tooltip-anonym">
+                <Popup
+                  trigger={<Icon circular name='help' />}
+                  content="Date of opening to capsule."
+                  basic
+                />
+              </div>
+              <div className="file-label-anonym" style={{ display: fileHash !== "" ? 'block' : 'none' }}>
+                <code><strong>File Hash: </strong></code>
+              </div>
+              <p className="hash-text-anonym">{fileHash}</p>
             </div>
             <div className="line_crate" />
             <div style={{ display: dropzoneStatus === "upload" ? "block" : "none" }}>
@@ -234,20 +216,18 @@ const App: React.FC = () => {
                 <code><p><strong>File Size: </strong>{file.fileSize}</p></code>
               </div>
             </div>
+            <div style={{ display: dropzoneStatus === "progress" ? "block" : "none" }}>
+              <div className="progress">
+                <Progress percent={percent} progress indicating />
+                <div className="progress-message">
+                  <Message info header='Please wait ultil file upload' />
+                </div>
+              </div>
+            </div>
           </Segment>
         </div>
-
-        <button style={{ marginTop: '1%' }} className="ui fluid secondary  button" onClick={CreateTimeCapsule}>Create Time Capsule</button>
+        <button style={{ marginTop: '1%' }} className="ui fluid secondary  button" onClick={CreateTimeCapsule} disabled={disabledStatus}>Create Time Capsule</button>
       </div>
-      <div style={{ display: completed === true ? 'block' : 'none' }}>
-        <Segment placeholder color="black" style={{ width: '75%', marginLeft: '10%', marginTop: '2%' }} >
-          <Progress percent={percent} progress indicating />
-          <div style={{}}>
-            <Message info header='Please wait ultil file upload' />
-          </div>
-        </Segment>
-      </div>
-
     </div>
   );
 };
