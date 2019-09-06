@@ -14,11 +14,19 @@ const App: React.FC = () => {
   const [disabledStatus, setDisabledStatus] = useState(false);
   const [dropzoneStatus, setDropzoneStatus] = useState("upload");
   const [fileHash, setFileHash] = useState("");
-  const [inputPublisherType, setInputPublisherType] = useState({
+  const [inputPublisher, setInputPublisher] = useState({
+    publisher: '',
     validationStatus: false,
     helperText: ""
   });
-  const [inputEmailType, setInputEmailType] = useState({
+  const [message, setMessage] = useState({
+    messageShow: false,
+    messageType: '',
+    messageTitle: '',
+    messageText: '',
+  });
+  const [inputEmail, setInputEmail] = useState({
+    email: '',
     validationStatus: false,
     helperText: ""
   });
@@ -42,19 +50,17 @@ const App: React.FC = () => {
     setState({ ...state, [name]: event.target.checked });
   };
   const handleChangePublisher = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     if (event.target.value.length == 0) {
-      setInputPublisherType({ validationStatus: true, helperText: "Publisher can not be empty" });
+      setInputPublisher({ publisher: "", validationStatus: true, helperText: "Publisher can not be empty" });
     } else {
-      setInputPublisherType({ validationStatus: false, helperText: "" });
+      setInputPublisher({ publisher: event.target.value, validationStatus: false, helperText: "" });
     }
   };
   const handleChangePublisherEmail = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     if (event.target.value.length == 0) {
-      setInputEmailType({ validationStatus: true, helperText: "Information Email can not be empty" });
+      setInputEmail({ email: "", validationStatus: true, helperText: "Information Email can not be empty" });
     } else {
-      setInputEmailType({ validationStatus: false, helperText: "" });
+      setInputEmail({ email: event.target.value, validationStatus: false, helperText: "" });
     }
   };
   function handleChangeFile(selectorFiles: FileList) {
@@ -62,14 +68,14 @@ const App: React.FC = () => {
     reader.onload = function () {
       var arrayBuffer = reader.result;
       let currentArray = arrayBuffer === null ? JSON.parse("null") : arrayBuffer;
-      var encrypted = CryptoJS.SHA256(currentArray);
-      setFileHash(encrypted.toString());
       var fileSize = readableBytes(selectorFiles[0].size);
       if (fileSize >= '50 MB')
         alert("File size  can not be bigger than 50 MB")
       else {
         data.delete("file");
         data.append("file", selectorFiles[0], selectorFiles[0].name);
+        var encrypted = CryptoJS.SHA256(currentArray);
+        setFileHash(encrypted.toString());
         setFile({ fileData: currentArray, fileName: selectorFiles[0].name, fileSize: readableBytes(selectorFiles[0].size), selectedFile: null });
         setDropzoneStatus("edit");
       }
@@ -77,12 +83,38 @@ const App: React.FC = () => {
     reader.readAsArrayBuffer(selectorFiles[0]);
   }
   function CreateTimeCapsule() {
-    setDropzoneStatus("progress")
-    setDisabledStatus(true);
+    let publisher;
+    let email;
+    var currentDate = Date.now();
+    var currentDate3 = Date.now();
+    console.log(startDate);
+    console.log(currentDate);
+    publisher = (document.getElementById("datePicker") as HTMLInputElement).value;
+    publisher = (document.getElementById("publisherInformation") as HTMLInputElement).value;
+    email = (document.getElementById("InformationEmail") as HTMLInputElement).value;
+    var currentDate = Date.now();
+    if (state.checkedB === false && (!publisher || !email || !file.fileName)) {
+      if (!publisher) {
+        setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Publisher name can not be empty!" })
+      } else if (!email) {
+        setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Information email can not be empty!" })
+      } else if (!file.fileName) {
+        setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "File can not be empty,please choose a file!" })
+      }
+    }
+    else if (file.fileName == "") {
+      setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "File can not be empty,please choose a file!" })
+    }
+    else if (startDate) {
+      setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "File can not be empty,please choose a file!" })
+    } else {
+      setDropzoneStatus("progress")
+      setDisabledStatus(true);
+    }
   }
 
-  const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date('2014-08-18T21:11:54'),
+  const [startDate, setStartDate] = useState<Date | null>(
+    new Date(),
   );
   return (
     <div className="App" style={{ paddingTop: '2%' }}>
@@ -108,26 +140,26 @@ const App: React.FC = () => {
                   <TextField
                     required
                     disabled={disabledStatus}
-                    error={inputPublisherType.validationStatus}
-                    id="standard-name"
+                    error={inputPublisher.validationStatus}
+                    id="publisherInformation"
                     label="Publisher"
                     defaultValue="John wick"
                     onChange={handleChangePublisher('name')}
                     margin="normal"
-                    helperText={inputPublisherType.helperText}
+                    helperText={inputPublisher.helperText}
                   />
                 </div><br />
                 <div className="label-text-email">
                   <TextField
                     required
                     disabled={disabledStatus}
-                    error={inputEmailType.validationStatus}
-                    id="standard-name"
+                    error={inputEmail.validationStatus}
+                    id="InformationEmail"
                     label="Information Email"
                     defaultValue="john@wick.com"
                     onChange={handleChangePublisherEmail('name')}
                     margin="normal"
-                    helperText={inputEmailType.helperText}
+                    helperText={inputEmail.helperText}
                   />
                 </div><br />
               </div>
@@ -140,12 +172,13 @@ const App: React.FC = () => {
                   selected={startDate}
                   onChange={date => setStartDate(date)}
                   showTimeSelect
+                  id="datePicker"
                   locale="tr"
-                  timeFormat="HH:mm"
+                  timeFormat="p"
                   timeIntervals={15}
                   timeCaption="Time"
                   todayButton="Today"
-                  dateFormat="d MMMM yyyy h:mm "
+                  dateFormat="d MMMM yyyy p  "
                 />
               </div>
               <div className="tooltip">
@@ -186,6 +219,7 @@ const App: React.FC = () => {
                   onChange={date => setStartDate(date)}
                   showTimeSelect
                   locale="tr"
+                  id="datePickerAnonym"
                   timeFormat="HH:mm"
                   timeIntervals={15}
                   timeCaption="Time"
@@ -226,6 +260,10 @@ const App: React.FC = () => {
             </div>
           </Segment>
         </div>
+        <Message warning className="button" style={{ display: message.messageShow === true && message.messageType === "warning" ? 'block' : 'none' }}>
+          <Message.Header>{message.messageTitle}</Message.Header>
+          <p>{message.messageText}</p>
+        </Message>
         <button style={{ marginTop: '1%' }} className="ui fluid secondary  button" onClick={CreateTimeCapsule} disabled={disabledStatus}>Create Time Capsule</button>
       </div>
     </div>
