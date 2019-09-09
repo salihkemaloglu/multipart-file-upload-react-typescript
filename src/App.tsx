@@ -7,8 +7,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import CryptoJS from 'crypto-js';
 import { tr } from 'date-fns/esm/locale';
 registerLocale("tr", tr);
-var avatarTest = require("./avatar3.png");
-var avatarAnonym = require("./avatar2.png");
+var avatarTest = require("./user.png");
+var avatarAnonym = require("./user.png");
 const App: React.FC = () => {
   const [percent, setPercent] = useState(80);
   const [disabledStatus, setDisabledStatus] = useState(false);
@@ -85,27 +85,22 @@ const App: React.FC = () => {
   function CreateTimeCapsule() {
     let publisher;
     let email;
-    var currentDate = Date.now();
-    var currentDate3 = Date.now();
-    console.log(startDate);
-    console.log(currentDate);
-    publisher = (document.getElementById("datePicker") as HTMLInputElement).value;
+    var currentDate = new Date();
+    var date = startDate == null ? JSON.parse(JSON.stringify("null")) : startDate;
     publisher = (document.getElementById("publisherInformation") as HTMLInputElement).value;
     email = (document.getElementById("InformationEmail") as HTMLInputElement).value;
-    var currentDate = Date.now();
     if (state.checkedB === false && (!publisher || !email || !file.fileName)) {
       if (!publisher) {
         setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Publisher name can not be empty!" })
       } else if (!email) {
         setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Information email can not be empty!" })
-      } else if (!file.fileName) {
-        setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "File can not be empty,please choose a file!" })
       }
-    }
-    else if (file.fileName == "") {
-      setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "File can not be empty,please choose a file!" })
-    }
-    else if (startDate) {
+    } 
+    if (date == "null") {
+      setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Date can not be empty!" })
+    } else if (date <= currentDate) {
+      setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Date can not be smaller than current time!" })
+    } else if (file.fileName == "") {
       setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "File can not be empty,please choose a file!" })
     } else {
       setDropzoneStatus("progress")
@@ -123,7 +118,7 @@ const App: React.FC = () => {
           <Segment placeholder color="black"  >
             <div style={{ display: state.checkedB === false ? 'block' : 'none' }}>
               <div className="avatar-image" style={{ float: "left" }}>
-                <Image src={avatarTest} size='small' circular />
+                <Image src={avatarTest} size='small'  />
               </div>
               <div style={{ float: "right", marginRight: "1%" }}>
                 <strong>Be Anonym:<Switch
@@ -195,7 +190,7 @@ const App: React.FC = () => {
             </div>
             <div style={{ display: state.checkedB === true ? 'block' : 'none' }}>
               <div className="avatar-image" style={{ float: "left" }}>
-                <Image src={avatarAnonym} size='small' circular />
+                <Image src={avatarAnonym} size='small'  />
               </div>
               <div className="publisher-info-anonym">
                 <code><p style={{ marginTop: "2%" }}><strong>Publisher: </strong>Anonymous User</p></code>
