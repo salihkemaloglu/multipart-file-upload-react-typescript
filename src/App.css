@@ -44,7 +44,7 @@
   border: 1px dashed #000;
   width: 100%;
   margin: auto;
-  margin-top: 1%;
+  margin-top: 2%;
 }
 .file_upload_zone {
   display: inline-block;
@@ -83,7 +83,7 @@
     width: 30%;
   }
   .label-text {
-    margin-top: 31%;
+    margin-top: 33%;
   }
   .pickers-anonym {
     float: left;
@@ -92,23 +92,23 @@
   }
   .pickers-label-anonym {
     float: left;
-    margin-top: -3%;
+    margin-top: 3%;
     width: 11%;
     margin-left: -3%;
   }
   .pickers {
     float: left;
-    margin-left: 26px;
-    margin-top: -36px;
+    margin-left: 32px;
+    margin-top: -24px;
   }
   .pickers-label {
-    margin-top: -4%;
+    margin-top: 16%;
     width: 9%;
     margin-left: -2%;
   }
   .label-text-publisher {
     float: left;
-    margin-left: -10px;
+    margin-left: -108px;
   }
   .label-text-email {
     float: right;
@@ -125,8 +125,8 @@
   }
   .tooltip {
     float: right;
-    margin-top: -36px;
-    margin-right: 24%;
+    margin-top: -25px;
+    margin-right: 22%;
   }
   .tooltip-anonym {
     float: left;
@@ -134,24 +134,25 @@
     margin-left: 2px;
   }
   .file-label {
-    width: 64px;
+    width: 80px;
+    margin-top: 4%;
     margin-left: -10px;
   }
   .hash-text {
     float: left;
-    margin-left: 59px;
-    margin-top: -32px;
+    margin-left: 69px;
+    margin-top: -19px;
     word-break: break-word;
     text-align: left;
   }
   .file-label-anonym {
-    width: 64px;
+    width: 78px;
     margin-left: -10px;
   }
   .hash-text-anonym {
     float: left;
-    margin-left: 59px;
-    margin-top: -32px;
+    margin-left: 70px;
+    margin-top: -19px;
     word-break: break-word;
     text-align: left;
   }
@@ -178,9 +179,9 @@
   }
   .pickers-label-anonym {
     float: left;
-    margin-top: 10%;
-    margin-left: -35%;
+    margin-top: 13%;
     width: 5%;
+    margin-left: -261px;
   }
   .pickers {
     margin-top: 69px;
@@ -189,7 +190,7 @@
   }
   .pickers-label {
     float: left;
-    margin-top: 7%;
+    margin-top: 10%;
     margin-left: 2%;
     width: 5%;
   }
@@ -212,20 +213,23 @@
     margin-left: -16px;
   }
   .file-label {
-    width: 64px;
+    width: 116px;
+    margin-left: 19%;
   }
   .hash-text {
-    float: left;
-    margin-left: 71px;
-    margin-top: -32px;
+    float: right;
+    margin-right: 3%;
+    margin-top: -19px;
   }
   .file-label-anonym {
-    width: 64px;
+    width: 159px;
+    margin-left: 13%;
+    margin-top: 18%;
   }
   .hash-text-anonym {
-    float: left;
-    margin-left: 67px;
-    margin-top: -32px;
+    float: right;
+    margin-right: 28px;
+    margin-top: -20px;
   }
   .publisher-info-anonym {
     float: left;

@@ -95,7 +95,7 @@ const App: React.FC = () => {
       } else if (!email) {
         setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Information email can not be empty!" })
       }
-    } 
+    }
     if (date == "null") {
       setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Date can not be empty!" })
     } else if (date <= currentDate) {
@@ -103,6 +103,7 @@ const App: React.FC = () => {
     } else if (file.fileName == "") {
       setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "File can not be empty,please choose a file!" })
     } else {
+      setMessage({ messageShow: true, messageTitle: "Please wait until encription and upload is finish", messageType: "info", messageText: "" })
       setDropzoneStatus("progress")
       setDisabledStatus(true);
     }
@@ -118,7 +119,7 @@ const App: React.FC = () => {
           <Segment placeholder color="black"  >
             <div style={{ display: state.checkedB === false ? 'block' : 'none' }}>
               <div className="avatar-image" style={{ float: "left" }}>
-                <Image src={avatarTest} size='small'  />
+                <Image src={avatarTest} size='small' />
               </div>
               <div style={{ float: "right", marginRight: "1%" }}>
                 <strong>Be Anonym:<Switch
@@ -190,7 +191,7 @@ const App: React.FC = () => {
             </div>
             <div style={{ display: state.checkedB === true ? 'block' : 'none' }}>
               <div className="avatar-image" style={{ float: "left" }}>
-                <Image src={avatarAnonym} size='small'  />
+                <Image src={avatarAnonym} size='small' />
               </div>
               <div className="publisher-info-anonym">
                 <code><p style={{ marginTop: "2%" }}><strong>Publisher: </strong>Anonymous User</p></code>
@@ -249,7 +250,10 @@ const App: React.FC = () => {
               <div className="progress">
                 <Progress percent={percent} progress indicating />
                 <div className="progress-message">
-                  <Message info header='Please wait ultil file upload' />
+                  <Message info  style={{ display: message.messageShow === true && message.messageType === "info" ? 'block' : 'none' }}>
+                    <Message.Header>{message.messageTitle}</Message.Header>
+                    <p>{message.messageText}</p>
+                  </Message>
                 </div>
               </div>
             </div>
