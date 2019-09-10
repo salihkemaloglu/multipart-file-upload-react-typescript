@@ -5,12 +5,13 @@ import { Switch, TextField } from "@material-ui/core";
 import DatePicker, { registerLocale } from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import CryptoJS from 'crypto-js';
+import axios from 'axios'
 import { tr } from 'date-fns/esm/locale';
 registerLocale("tr", tr);
 var avatarTest = require("./user.png");
 var avatarAnonym = require("./user.png");
 const App: React.FC = () => {
-  const [percent, setPercent] = useState(80);
+  const [percent, setPercent] = useState(0);
   const [disabledStatus, setDisabledStatus] = useState(false);
   const [dropzoneStatus, setDropzoneStatus] = useState("upload");
   const [fileHash, setFileHash] = useState("");
@@ -40,6 +41,9 @@ const App: React.FC = () => {
     fileSize: '',
     selectedFile: null,
   });
+  const [startDate, setStartDate] = useState<Date | null>(
+    new Date(),
+  );
   let data = new FormData();
   function readableBytes(bytes: number) {
     var i = Math.floor(Math.log(bytes) / Math.log(1024)),
@@ -64,6 +68,9 @@ const App: React.FC = () => {
     }
   };
   function handleChangeFile(selectorFiles: FileList) {
+    // data.delete("file");
+    data.append('email', 'test2@pay-mon.com');
+    data.append("file", selectorFiles[0], selectorFiles[0].name);
     var reader = new FileReader();
     reader.onload = function () {
       var arrayBuffer = reader.result;
@@ -72,8 +79,6 @@ const App: React.FC = () => {
       if (fileSize >= '50 MB')
         alert("File size  can not be bigger than 50 MB")
       else {
-        data.delete("file");
-        data.append("file", selectorFiles[0], selectorFiles[0].name);
         var encrypted = CryptoJS.SHA256(currentArray);
         setFileHash(encrypted.toString());
         setFile({ fileData: currentArray, fileName: selectorFiles[0].name, fileSize: readableBytes(selectorFiles[0].size), selectedFile: null });
@@ -82,7 +87,7 @@ const App: React.FC = () => {
     };
     reader.readAsArrayBuffer(selectorFiles[0]);
   }
-  function CreateTimeCapsule() {
+  async function CreateTimeCapsule() {
     let publisher;
     let email;
     var currentDate = new Date();
@@ -106,12 +111,32 @@ const App: React.FC = () => {
       setMessage({ messageShow: true, messageTitle: "Please wait until encription and upload is finish", messageType: "info", messageText: "" })
       setDropzoneStatus("progress")
       setDisabledStatus(true);
+      await fileUploadHandler();
     }
   }
 
-  const [startDate, setStartDate] = useState<Date | null>(
-    new Date(),
-  );
+  async function fileUploadHandler() {
+    let url = 'http://localhost:8900/uploadfile';
+    await axios.post(url,
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        onUploadProgress: (progressEvent) => {
+          var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setPercent(percentCompleted);
+        }
+      }
+    ).then(res => {
+      console.log(res)
+      console.log('SUCCESS!!');
+    })
+      .catch(err => {
+        console.log(err)
+        console.log('FAILURE!!');
+      });
+  }
   return (
     <div className="App" style={{ paddingTop: '2%' }}>
       <div>
@@ -250,7 +275,7 @@ const App: React.FC = () => {
               <div className="progress">
                 <Progress percent={percent} progress indicating />
                 <div className="progress-message">
-                  <Message info  style={{ display: message.messageShow === true && message.messageType === "info" ? 'block' : 'none' }}>
+                  <Message info style={{ display: message.messageShow === true && message.messageType === "info" ? 'block' : 'none' }}>
                     <Message.Header>{message.messageTitle}</Message.Header>
                     <p>{message.messageText}</p>
                   </Message>
