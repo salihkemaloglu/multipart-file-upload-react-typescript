@@ -35,19 +35,21 @@ const App: React.FC = () => {
     checkedA: false,
     checkedB: false,
   });
-  const [file, setFile] = React.useState({
-    fileData: [],
+  const [file, setFile] = useState({
     fileName: '',
+    fileSizeType: '',
     fileSize: '',
-    selectedFile: null,
   });
+  const [fileData, setFileData] = useState<string | Blob>();
   const [startDate, setStartDate] = useState<Date | null>(
     new Date(),
   );
-  let data = new FormData();
-  function readableBytes(bytes: number) {
+  function readableBytes(fileName: string, bytes: number) {
     var i = Math.floor(Math.log(bytes) / Math.log(1024)),
       sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    setFile({
+      fileName: fileName, fileSizeType: sizes[i], fileSize: (bytes / Math.pow(1024, i)).toFixed(2)
+    })
     return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
   }
   const handleChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,24 +70,18 @@ const App: React.FC = () => {
     }
   };
   function handleChangeFile(selectorFiles: FileList) {
-    // data.delete("file");
-    data.append('email', 'test2@pay-mon.com');
-    data.append("file", selectorFiles[0], selectorFiles[0].name);
-    var reader = new FileReader();
-    reader.onload = function () {
-      var arrayBuffer = reader.result;
-      let currentArray = arrayBuffer === null ? JSON.parse("null") : arrayBuffer;
-      var fileSize = readableBytes(selectorFiles[0].size);
-      if (fileSize >= '50 MB')
-        alert("File size  can not be bigger than 50 MB")
-      else {
-        var encrypted = CryptoJS.SHA256(currentArray);
-        setFileHash(encrypted.toString());
-        setFile({ fileData: currentArray, fileName: selectorFiles[0].name, fileSize: readableBytes(selectorFiles[0].size), selectedFile: null });
-        setDropzoneStatus("edit");
-      }
-    };
-    reader.readAsArrayBuffer(selectorFiles[0]);
+
+    readableBytes(selectorFiles[0].name, selectorFiles[0].size);
+    if (selectorFiles[0].size >= 10000000) {
+      setMessage({ messageShow: true, messageTitle: "File size  can not be bigger than 10 MB!", messageType: "warning", messageText: "" })
+    } else {
+      let file = selectorFiles[0] === undefined ? JSON.parse("null") : selectorFiles[0];
+      var encrypted = CryptoJS.SHA256(file);
+      setFileHash(encrypted.toString());
+      setFileData(selectorFiles[0])
+      setMessage({ messageShow: false, messageTitle: "", messageType: "", messageText: "" })
+      setDropzoneStatus("edit");
+    }
   }
   async function CreateTimeCapsule() {
     let publisher;
@@ -94,19 +90,16 @@ const App: React.FC = () => {
     var date = startDate == null ? JSON.parse(JSON.stringify("null")) : startDate;
     publisher = (document.getElementById("publisherInformation") as HTMLInputElement).value;
     email = (document.getElementById("InformationEmail") as HTMLInputElement).value;
-    if (state.checkedB === false && (!publisher || !email || !file.fileName)) {
-      if (!publisher) {
-        setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Publisher name can not be empty!" })
-      } else if (!email) {
-        setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Information email can not be empty!" })
-      }
-    }
-    if (date == "null") {
-      setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Date can not be empty!" })
+    if (state.checkedB === false && !publisher) {
+      setMessage({ messageShow: true, messageTitle: "Publisher name can not be empty!", messageType: "warning", messageText: "" })
+    } else if (state.checkedB === false && !email) {
+      setMessage({ messageShow: true, messageTitle: "Information email can not be empty!", messageType: "warning", messageText: "" })
+    } else if (date == "null") {
+      setMessage({ messageShow: true, messageTitle: "Date can not be empty!", messageType: "warning", messageText: "" })
     } else if (date <= currentDate) {
-      setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "Date can not be smaller than current time!" })
+      setMessage({ messageShow: true, messageTitle: "Date can not be smaller than current time!", messageType: "warning", messageText: "" })
     } else if (file.fileName == "") {
-      setMessage({ messageShow: true, messageTitle: "", messageType: "warning", messageText: "File can not be empty,please choose a file!" })
+      setMessage({ messageShow: true, messageTitle: "File can not be empty,please choose a file!", messageType: "warning", messageText: "" })
     } else {
       setMessage({ messageShow: true, messageTitle: "Please wait until encription and upload is finish", messageType: "info", messageText: "" })
       setDropzoneStatus("progress")
@@ -117,25 +110,36 @@ const App: React.FC = () => {
 
   async function fileUploadHandler() {
     let url = 'http://localhost:8900/uploadfile';
-    await axios.post(url,
-      data,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        onUploadProgress: (progressEvent) => {
-          var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setPercent(percentCompleted);
+    let data = new FormData();
+    let currentFile = fileData === undefined ? JSON.parse("null") : fileData;
+    if (currentFile == "null") {
+      setMessage({ messageShow: true, messageTitle: "File can not be empty,please choose a file!", messageType: "warning", messageText: "" })
+    } else if (parseInt(file.fileSize) >= 10000000) {
+      setMessage({ messageShow: true, messageTitle: "File size  can not be bigger than 10 MB!", messageType: "warning", messageText: "" })
+    } else {
+      data.append("file", currentFile, file.fileName);
+      await axios.post(url,
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'JWT',
+          },
+          onUploadProgress: (progressEvent) => {
+            var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setPercent(percentCompleted);
+          }
         }
-      }
-    ).then(res => {
-      console.log(res)
-      console.log('SUCCESS!!');
-    })
-      .catch(err => {
-        console.log(err)
+      ).then(res => {
+        console.log(res)
+        console.log('SUCCESS!!');
+      }).catch(err => {
+        setDropzoneStatus("edit")
+        setMessage({ messageShow: true, messageTitle: err.response.data.error, messageType: "warning", messageText: "" })
         console.log('FAILURE!!');
       });
+    }
+
   }
   return (
     <div className="App" style={{ paddingTop: '2%' }}>
