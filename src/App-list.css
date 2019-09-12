@@ -1,0 +1,39 @@
+/* Mobile Styles */
+@media only screen and (max-width: 400px) {
+  .avatar-image {
+    float: left;
+    width: 30%;
+  }
+  .publisher-info-anonym {
+    float: left;
+    margin-top: 3%;
+    margin-left: -3%;
+    text-align: left;
+  }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+  .publisher-info-anonym {
+    float: left;
+    margin-top: 3%;
+    margin-left: 2%;
+    text-align: left;
+  }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 961px) {
+
+  .time-capsule-block {
+    width: 86%;
+    margin-left: 7%;
+  }
+
+  .publisher-info-anonym {
+    float: left;
+    margin-top: 3%;
+    margin-left: 2%;
+    text-align: left;
+  }
+}
