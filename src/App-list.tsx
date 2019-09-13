@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App-list.css";
-import { Segment, Image } from "semantic-ui-react";
+import { Segment, Image, Header, Label } from "semantic-ui-react";
 var avatarAnonym = require("./user.png");
 const AppList: React.FC = () => {
   var dates = new Date();
@@ -11,20 +11,22 @@ const AppList: React.FC = () => {
     minute: 0,
     second: 0,
   });
+
+  const incomeDates = [] as any;
   document.addEventListener('DOMContentLoaded', (event) => {
-    dates.setDate(dates.getDate() + 10);
+    for (let index = 0; index < 100; index++) {
+      dates.setDate(dates.getDate() + index);
+      incomeDates.push(dates);
+    }
     startCountdown();
   });
   function startCountdown() {
     var interval = setInterval(() => {
-      calculateCountdown(dates);
+      incomeDates.forEach((element: any) => {
+        calculateCountdown(element);
+      });
       if (countDown.second < 0) {
-
-        // The code here will run when
-        // the timer has reached zero.
-
         clearInterval(interval);
-        console.log('Ding!');
       };
     }, 1000);
   };
@@ -72,9 +74,10 @@ const AppList: React.FC = () => {
     }
     return value;
   }
-  return (
-    <div className="App" style={{ paddingTop: '2%' }}>
-      <div>
+  const item = [] as any;
+  const TimeCapsule = (props: any) => {
+    for (let index = 0; index < 100; index++) {
+      item.push(
         <div className="time-capsule-block" >
           <Segment placeholder color="green" >
             <Segment.Group horizontal>
@@ -85,45 +88,49 @@ const AppList: React.FC = () => {
               </Segment>
               <Segment style={{ width: "80%" }} stacked>
                 <div className="publisher-info-anonym">
-                  <code><p ><strong>Publisher: </strong>Anonymous User</p></code>
-                  <code><p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Name: </strong>Anonymous Email</p></code>
-                  <code><p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Hash: </strong>Anonymous Email</p></code>
+                  <p ><strong>Publisher: </strong>Anonymous User</p>
+                  <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Name: </strong>Anonymous Email</p>
+                  <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Hash: </strong>043a718774c572bd8a25adbeb1bfcd5c0256ae11cecf9f9c3f925d0e52beaf89</p>
                 </div>
-                <div className="Countdown">
-                  <span className="Countdown-col">
-                    <span className="Countdown-col-element">
-                      <strong>{addLeadingZeros(countDown.days)}</strong>
-                      <span>{countDown.days === 1 ? 'Day' : 'Days'}</span>
-                    </span>
-                  </span>
-
-                  <span className="Countdown-col">
-                    <span className="Countdown-col-element">
-                      <strong>{addLeadingZeros(countDown.hours)}</strong>
-                      <span>Hours</span>
-                    </span>
-                  </span>
-
-
-                  <span className="Countdown-col">
-                    <span className="Countdown-col-element">
-                      <strong>{addLeadingZeros(countDown.minute)}</strong>
-                      <span>Min</span>
-                    </span>
-                  </span>
-
-                  <span className="Countdown-col">
-                    <span className="Countdown-col-element">
-                      <strong>{addLeadingZeros(countDown.second)}</strong>
-                      <span>Sec</span>
-                    </span>
-                  </span>
-                </div>
+                <Label color="black" style={{ float: "right" }}>#{index}</Label>
+                <Segment.Group horizontal>
+                  <Segment className="square">
+                    <Header as='h1'  >
+                      {addLeadingZeros(countDown.days)}
+                      <Header.Subheader >{countDown.days === 1 ? 'Day' : 'Days'}</Header.Subheader>
+                    </Header>
+                  </Segment>
+                  <Segment className="square">
+                    <Header as='h1' >
+                      {addLeadingZeros(countDown.hours)}
+                      <Header.Subheader>Hours</Header.Subheader>
+                    </Header>
+                  </Segment>
+                  <Segment className="square">
+                    <Header as='h1' >
+                      {addLeadingZeros(countDown.minute)}
+                      <Header.Subheader>Minute</Header.Subheader>
+                    </Header>
+                  </Segment>
+                  <Segment className="square">
+                    <Header as='h1' >
+                      {addLeadingZeros(countDown.second)}
+                      <Header.Subheader>Second</Header.Subheader>
+                    </Header>
+                  </Segment>
+                </Segment.Group>
               </Segment>
             </Segment.Group>
           </Segment>
+          <br />
         </div>
-      </div>
+      );
+    }
+    return item;
+  }
+  return (
+    <div className="App" style={{ paddingTop: '2%' }}>
+      <TimeCapsule />
     </div>
   );
 };

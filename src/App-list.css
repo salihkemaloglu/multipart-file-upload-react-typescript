@@ -10,6 +10,10 @@
     margin-left: -3%;
     text-align: left;
   }
+  .square {
+    width: 15px;
+    height: 15px;
+  }
 }
 
 /* Tablet Styles */
@@ -20,11 +24,14 @@
     margin-left: 2%;
     text-align: left;
   }
+  .square {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 /* Desktop Styles */
 @media only screen and (min-width: 961px) {
-
   .time-capsule-block {
     width: 86%;
     margin-left: 7%;
@@ -33,7 +40,29 @@
   .publisher-info-anonym {
     float: left;
     margin-top: 3%;
-    margin-left: 2%;
     text-align: left;
   }
+  .square {
+    width: 100px;
+    height: 100px;
+  }
+}
+.Countdown {
+  margin: 10px auto;
+  padding-bottom: 20px;
+}
+
+.Countdown-col {
+  display: inline-block;
+}
+
+.Countdown-col-element {
+  display: inline-block;
+  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.Countdown-col-element strong {
+  font-size: 50px;
 }

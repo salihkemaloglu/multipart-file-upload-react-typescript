@@ -189,7 +189,7 @@ const App: React.FC = () => {
                 </div><br />
               </div>
               <div className="pickers-label">
-                <code><strong>Date: </strong></code>
+               <strong>Date: </strong>
               </div>
               <div className="pickers">
                 <DatePicker
@@ -214,7 +214,7 @@ const App: React.FC = () => {
                 />
               </div>
               <div className="file-label" style={{ display: fileHash !== "" ? 'block' : 'none' }}>
-                <code><strong>File Hash: </strong></code>
+                <strong>File Hash: </strong>
               </div>
               <p className="hash-text">{fileHash}</p>
             </div>
@@ -223,8 +223,8 @@ const App: React.FC = () => {
                 <Image src={avatarAnonym} size='small' />
               </div>
               <div className="publisher-info-anonym">
-                <code><p style={{ marginTop: "2%" }}><strong>Publisher: </strong>Anonymous User</p></code>
-                <code><p className="email-anonym" style={{ marginTop: "5%" }}><strong>Information Email: </strong>Anonymous Email</p></code>
+               <p style={{ marginTop: "2%" }}><strong>Publisher: </strong>Anonymous User</p>
+               <p className="email-anonym" style={{ marginTop: "5%" }}><strong>Information Email: </strong>Anonymous Email</p>
               </div>
               <div className="anonym-switch" style={{ float: "right", marginRight: "1%" }}>
                 <strong>Anonym:<Switch
@@ -236,7 +236,7 @@ const App: React.FC = () => {
                 /></strong>
               </div>
               <div className="pickers-label-anonym">
-                <code><strong>Date: </strong></code>
+                <strong>Date: </strong>
               </div>
               <div className="pickers-anonym">
                 <DatePicker
@@ -260,7 +260,7 @@ const App: React.FC = () => {
                 />
               </div>
               <div className="file-label-anonym" style={{ display: fileHash !== "" ? 'block' : 'none' }}>
-                <code><strong>File Hash: </strong></code>
+                <strong>File Hash: </strong>
               </div>
               <p className="hash-text-anonym">{fileHash}</p>
             </div>
@@ -271,8 +271,8 @@ const App: React.FC = () => {
             <div style={{ display: dropzoneStatus === "edit" ? "block" : "none" }}>
               <input style={{ float: "left", cursor: "pointer", width: "50%" }} className="file_upload_zone" type="file" onChange={(e: any) => handleChangeFile(e.target.files)} />
               <div style={{ float: "left", textAlign: "left", width: "50%", marginTop: "4%" }}>
-                <code><p><strong>File Name: </strong>{file.fileName}</p></code><br />
-                <code><p><strong>File Size: </strong>{file.fileSize}</p></code>
+               <p><strong>File Name: </strong>{file.fileName}</p><br />
+               <p><strong>File Size: </strong>{file.fileSize}</p>
               </div>
             </div>
             <div style={{ display: dropzoneStatus === "progress" ? "block" : "none" }}>
