@@ -1,48 +1,46 @@
 import React, { useState } from "react";
 import "./App-list.css";
 import { Segment, Image, Header, Label } from "semantic-ui-react";
+import { UserInfo } from "./user";
 var avatarAnonym = require("./user.png");
+// import { UserInfo } from './user';
 const AppList: React.FC = () => {
   var dates = new Date();
-
-  const [countDown, setCountDown] = useState({
-    years: 0,
-    days: 0,
-    hours: 0,
-    minute: 0,
-    second: 0,
-  });
-  const [incomeDates, setIncomeDates] = useState<any>([]);
-  const damiData = [] as any;
+  const [publisherInfo, setPublisherInfo] = useState<any>([]);
+  var damiData = [] as any;
   function startCountdown() {
     var interval = setInterval(() => {
-      damiData=[];
-      damiData.forEach((element: any) => {
-        var date = new Date();
-        date.setFullYear(element.years);
-        date.setDate(element.days);
-        date.setHours(element.hours);
-        date.setMinutes(element.minutes);
-        var remaningTime = calculateCountdown(date);
-      damiData.push(calculateCountdown(date));
-
-      });
-      setIncomeDates([]);
-      setIncomeDates(damiData);
-      if (countDown.second < 0) {
+      var tempData = [] as any;
+      console.log("damiData", damiData.length);
+      for (var i = 0; i < damiData.length; i++) {
+        var remaningTime = calculateCountdown(new Date(damiData[i].fileOpenedDate));
+        if (remaningTime.years <= 0 && remaningTime.days <= 0 && remaningTime.hours <= 0 && remaningTime.minutes <= 0) {
+          damiData.splice(i, 1);
+        } else {
+          tempData.push(damiData[i].UserInfo.remaningDate[i].push(remaningTime));
+        }
+      }
+      setPublisherInfo(tempData);
+      console.log("tempData", tempData.length);
+      if (damiData.length <= 0) {
         clearInterval(interval);
       };
     }, 60000);
   };
 
   document.addEventListener('DOMContentLoaded', (event) => {
-    for (let index = 0; index < 100; index++) {
-      dates.setDate(dates.getDate() + 10);
-      dates.setHours(dates.getHours() + 10);
-      dates.setMinutes(dates.getMinutes() + 10);
-      damiData.push(calculateCountdown(dates));
+    for (let index = 0; index <= 100; index++) {
+      dates.setMinutes(dates.getMinutes() + 1);
+      var date = new Date(dates);
+      var userInfo = new UserInfo();
+      userInfo.Publisher = index + "name";
+      userInfo.FileName = index + "fileName";
+      userInfo.FileHash = "043a718774c572bd8a25adbeb1bfcd5c0256ae11cecf9f9c3f925d0e52beaf89";
+      userInfo.FileOpenedDate = date.toString();
+      userInfo.RemaningDate.push(calculateCountdown(dates))
+      damiData.push(userInfo);
     }
-    setIncomeDates(damiData);
+    setPublisherInfo(damiData);
     startCountdown();
   });
   function calculateCountdown(endDate: Date) {
@@ -73,7 +71,6 @@ const AppList: React.FC = () => {
       timeLeft.minutes = Math.floor(diff / 60);
       diff -= timeLeft.minutes * 60;
     }
-    setCountDown({ years: timeLeft.years, days: timeLeft.days, hours: timeLeft.days, minute: timeLeft.minutes, second: timeLeft.second });
     return timeLeft;
   }
   function addLeadingZeros(value: any) {
@@ -85,59 +82,58 @@ const AppList: React.FC = () => {
   }
   const item = [] as any;
   const TimeCapsule = (props: any) => {
-    // startCountdown();
-    console.log(incomeDates.length)
-      for (let index = 0; index < incomeDates.length; index++) {
-        item.push(
-          <div className="time-capsule-block" >
-            <Segment placeholder color="green" >
-              <Segment.Group horizontal>
-                <Segment>
-                  <div className="avatar-image" style={{ float: "left" }}>
-                    <Image src={avatarAnonym} size='small' />
-                  </div>
-                </Segment>
-                <Segment style={{ width: "80%" }} stacked>
-                  <div className="publisher-info-anonym">
-                    <p ><strong>Publisher: </strong>Anonymous User</p>
-                    <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Name: </strong>Anonymous Email</p>
-                    <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Hash: </strong>043a718774c572bd8a25adbeb1bfcd5c0256ae11cecf9f9c3f925d0e52beaf89</p>
-                  </div>
-                  <Label color="black" style={{ float: "right" }}>#{index}</Label>
-                  <Segment.Group horizontal>
-                    <Segment className="square">
-                      <Header as='h1'  >
-                        {addLeadingZeros(incomeDates[index].years)}
-                        <Header.Subheader >{incomeDates[index].years === 1 ? 'Year' : 'Years'}</Header.Subheader>
-                      </Header>
-                    </Segment>
-                    <Segment className="square">
-                      <Header as='h1'  >
-                        {addLeadingZeros(incomeDates[index].days)}
-                        <Header.Subheader >{incomeDates[index].days === 1 ? 'Day' : 'Days'}</Header.Subheader>
-                      </Header>
-                    </Segment>
-                    <Segment className="square">
-                      <Header as='h1' >
-                        {addLeadingZeros(incomeDates[index].hours)}
-                        <Header.Subheader>Hours</Header.Subheader>
-                      </Header>
-                    </Segment>
-                    <Segment className="square">
-                      <Header as='h1' >
-                        {addLeadingZeros(incomeDates[index].minutes)}
-                        <Header.Subheader>Minute</Header.Subheader>
-                      </Header>
-                    </Segment>
-                  </Segment.Group>
-                </Segment>
-              </Segment.Group>
-            </Segment>
-            <br />
-          </div>
-        );
-      }
-      return item;
+    var count = 0;
+    for (let index = 0; index < publisherInfo.length; index++) {
+      item.push(
+        <div className="time-capsule-block" >
+          <Segment placeholder color="green" >
+            <Segment.Group horizontal>
+              <Segment>
+                <div className="avatar-image" style={{ float: "left" }}>
+                  <Image src={avatarAnonym} size='small' />
+                </div>
+              </Segment>
+              <Segment style={{ width: "80%" }} stacked>
+                <div className="publisher-info-anonym">
+                  <p ><strong>Publisher: </strong>{publisherInfo[index].UserInfo[index].Publisher}</p>
+                  <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Name: </strong>{publisherInfo[index].UserInfo[index].FileName}</p>
+                  <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Hash: </strong>{publisherInfo[index].UserInfo[index].FileHash}</p>
+                </div>
+                <Label color="black" style={{ float: "right" }}>#{++count}</Label>
+                <Segment.Group horizontal>
+                  <Segment className="square">
+                    <Header as='h1'  >
+                      {addLeadingZeros(publisherInfo[index].UserInfo[index].RemaningDate[0].years)}
+                      <Header.Subheader >{publisherInfo[index].UserInfo[index].RemaningDate[0].years === 1 ? 'Year' : 'Years'}</Header.Subheader>
+                    </Header>
+                  </Segment>
+                  <Segment className="square">
+                    <Header as='h1'  >
+                      {addLeadingZeros(publisherInfo[index].UserInfo[index].RemaningDate[0].days)}
+                      <Header.Subheader >{publisherInfo[index].UserInfo.RemaningDate[0].days === 1 ? 'Day' : 'Days'}</Header.Subheader>
+                    </Header>
+                  </Segment>
+                  <Segment className="square">
+                    <Header as='h1' >
+                      {addLeadingZeros(publisherInfo[index].UserInfo[index].RemaningDate[0].hours)}
+                      <Header.Subheader>Hours</Header.Subheader>
+                    </Header>
+                  </Segment>
+                  <Segment className="square">
+                    <Header as='h1' >
+                      {addLeadingZeros(publisherInfo[index].UserInfo[index].remaningDate[0].minutes)}
+                      <Header.Subheader>Minute</Header.Subheader>
+                    </Header>
+                  </Segment>
+                </Segment.Group>
+              </Segment>
+            </Segment.Group>
+          </Segment>
+          <br />
+        </div>
+      );
+    }
+    return item;
   }
   return (
     <div className="App" style={{ paddingTop: '2%' }}>
@@ -147,3 +143,4 @@ const AppList: React.FC = () => {
 };
 
 export default AppList;
+
