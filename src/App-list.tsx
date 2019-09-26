@@ -10,18 +10,21 @@ const AppList: React.FC = () => {
   var damiData = [] as any;
   function startCountdown() {
     var interval = setInterval(() => {
-      var tempData = [] as any;
       console.log("damiData", damiData.length);
       for (var i = 0; i < damiData.length; i++) {
-        var remaningTime = calculateCountdown(new Date(damiData[i].fileOpenedDate));
+        var remaningTime = calculateCountdown(new Date(damiData[i].FileOpenedDate));
         if (remaningTime.years <= 0 && remaningTime.days <= 0 && remaningTime.hours <= 0 && remaningTime.minutes <= 0) {
           damiData.splice(i, 1);
         } else {
-          tempData.push(damiData[i].UserInfo.remaningDate[i].push(remaningTime));
+          damiData[i].RemaningDate.splice(0, 1);
+          damiData[i].RemaningDate.push(remaningTime);
         }
       }
-      setPublisherInfo(tempData);
-      console.log("tempData", tempData.length);
+      setPublisherInfo([]);
+      damiData.sort(function(a:any, b:any){return a.UnitAmount - b.UnitAmount}); 
+      setPublisherInfo(damiData);
+      console.log("damiData after", damiData.length);
+      console.log("damiData", damiData);
       if (damiData.length <= 0) {
         clearInterval(interval);
       };
@@ -37,9 +40,11 @@ const AppList: React.FC = () => {
       userInfo.FileName = index + "fileName";
       userInfo.FileHash = "043a718774c572bd8a25adbeb1bfcd5c0256ae11cecf9f9c3f925d0e52beaf89";
       userInfo.FileOpenedDate = date.toString();
+      userInfo.UnitAmount = Math.floor(Math.random() * 101) + 0.1;
       userInfo.RemaningDate.push(calculateCountdown(dates))
       damiData.push(userInfo);
     }
+    damiData.sort(function(a:any, b:any){return a.UnitAmount - b.UnitAmount});
     setPublisherInfo(damiData);
     startCountdown();
   });
@@ -83,7 +88,9 @@ const AppList: React.FC = () => {
   const item = [] as any;
   const TimeCapsule = (props: any) => {
     var count = 0;
+    console.log("publisherInfo after", publisherInfo.length);
     for (let index = 0; index < publisherInfo.length; index++) {
+      console.log("UnitAmount", publisherInfo[index].UnitAmount);
       item.push(
         <div className="time-capsule-block" >
           <Segment placeholder color="green" >
@@ -95,33 +102,33 @@ const AppList: React.FC = () => {
               </Segment>
               <Segment style={{ width: "80%" }} stacked>
                 <div className="publisher-info-anonym">
-                  <p ><strong>Publisher: </strong>{publisherInfo[index].UserInfo[index].Publisher}</p>
-                  <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Name: </strong>{publisherInfo[index].UserInfo[index].FileName}</p>
-                  <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Hash: </strong>{publisherInfo[index].UserInfo[index].FileHash}</p>
+                  <p ><strong>Publisher: </strong>{publisherInfo[index].Publisher}</p>
+                  <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Name: </strong>{publisherInfo[index].FileName}</p>
+                  <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Hash: </strong>{publisherInfo[index].FileHash}</p>
                 </div>
                 <Label color="black" style={{ float: "right" }}>#{++count}</Label>
                 <Segment.Group horizontal>
                   <Segment className="square">
                     <Header as='h1'  >
-                      {addLeadingZeros(publisherInfo[index].UserInfo[index].RemaningDate[0].years)}
-                      <Header.Subheader >{publisherInfo[index].UserInfo[index].RemaningDate[0].years === 1 ? 'Year' : 'Years'}</Header.Subheader>
+                      {addLeadingZeros(publisherInfo[index].RemaningDate[0].years)}
+                      <Header.Subheader >{publisherInfo[index].RemaningDate[0].years === 1 ? 'Year' : 'Years'}</Header.Subheader>
                     </Header>
                   </Segment>
                   <Segment className="square">
                     <Header as='h1'  >
-                      {addLeadingZeros(publisherInfo[index].UserInfo[index].RemaningDate[0].days)}
-                      <Header.Subheader >{publisherInfo[index].UserInfo.RemaningDate[0].days === 1 ? 'Day' : 'Days'}</Header.Subheader>
+                      {addLeadingZeros(publisherInfo[index].RemaningDate[0].days)}
+                      <Header.Subheader >{publisherInfo[index].RemaningDate[0].days === 1 ? 'Day' : 'Days'}</Header.Subheader>
                     </Header>
                   </Segment>
                   <Segment className="square">
                     <Header as='h1' >
-                      {addLeadingZeros(publisherInfo[index].UserInfo[index].RemaningDate[0].hours)}
+                      {addLeadingZeros(publisherInfo[index].RemaningDate[0].hours)}
                       <Header.Subheader>Hours</Header.Subheader>
                     </Header>
                   </Segment>
                   <Segment className="square">
                     <Header as='h1' >
-                      {addLeadingZeros(publisherInfo[index].UserInfo[index].remaningDate[0].minutes)}
+                      {addLeadingZeros(publisherInfo[index].RemaningDate[0].minutes)}
                       <Header.Subheader>Minute</Header.Subheader>
                     </Header>
                   </Segment>
