@@ -3,7 +3,7 @@ import "./App-list.css";
 import { Segment, Image, Header, Label } from "semantic-ui-react";
 import { UserInfo } from "./user";
 var avatarAnonym = require("./user.png");
-// import { UserInfo } from './user';
+var unit = require("./unit.png");
 const AppList: React.FC = () => {
   var dates = new Date();
   const [publisherInfo, setPublisherInfo] = useState<any>([]);
@@ -21,7 +21,7 @@ const AppList: React.FC = () => {
         }
       }
       setPublisherInfo([]);
-      damiData.sort(function(a:any, b:any){return a.UnitAmount - b.UnitAmount}); 
+      damiData.sort(function (a: any, b: any) { return b.UnitAmount - a.UnitAmount });
       setPublisherInfo(damiData);
       console.log("damiData after", damiData.length);
       console.log("damiData", damiData);
@@ -44,7 +44,7 @@ const AppList: React.FC = () => {
       userInfo.RemaningDate.push(calculateCountdown(dates))
       damiData.push(userInfo);
     }
-    damiData.sort(function(a:any, b:any){return a.UnitAmount - b.UnitAmount});
+    damiData.sort(function (a: any, b: any) { return b.UnitAmount - a.UnitAmount });
     setPublisherInfo(damiData);
     startCountdown();
   });
@@ -133,6 +133,11 @@ const AppList: React.FC = () => {
                     </Header>
                   </Segment>
                 </Segment.Group>
+                <Label color='black'  style={{ float: "right" }}>{publisherInfo[index].UnitAmount}  <img src={unit} /></Label>
+                {/* <Label as='a' image color='black' style={{ float: "right" }}>
+                  <img src={unit} />
+                  {publisherInfo[index].UnitAmount}
+                </Label> */}
               </Segment>
             </Segment.Group>
           </Segment>
