@@ -8,40 +8,29 @@ import CryptoJS from 'crypto-js';
 import axios from 'axios'
 import { tr } from 'date-fns/esm/locale';
 registerLocale("tr", tr);
-var avatarTest = require("./user.png");
-var avatarAnonym = require("./user.png");
 const App: React.FC = () => {
   const [percent, setPercent] = useState(0);
   const [disabledStatus, setDisabledStatus] = useState(false);
   const [dropzoneStatus, setDropzoneStatus] = useState("upload");
   const [fileHash, setFileHash] = useState("");
-  const [inputPublisher, setInputPublisher] = useState({
-    publisher: '',
-    validationStatus: false,
-    helperText: ""
-  });
+  const [publisher, setPublisher] = useState("John Wick");
   const [message, setMessage] = useState({
     messageShow: false,
     messageType: '',
     messageTitle: '',
     messageText: '',
   });
-  const [inputEmail, setInputEmail] = useState({
-    email: '',
-    validationStatus: false,
-    helperText: ""
-  });
-  const [state, setState] = useState({
-    checkedA: false,
-    checkedB: false,
-  });
+  const [isUserAnonym, setIsUserAnonym] = useState(false);
   const [file, setFile] = useState({
     fileName: '',
     fileSizeType: '',
     fileSize: '',
   });
   const [fileData, setFileData] = useState<string | Blob>();
-  const [startDate, setStartDate] = useState<Date | null>(
+  const [startDate, setStartDate] = useState<Date>(
+    new Date(),
+  );
+  const [startTime, setStartTime] = useState<Date>(
     new Date(),
   );
   function readableBytes(fileName: string, bytes: number) {
@@ -52,25 +41,11 @@ const App: React.FC = () => {
     })
     return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
   }
-  const handleChange = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [name]: event.target.checked });
-  };
-  const handleChangePublisher = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.length == 0) {
-      setInputPublisher({ publisher: "", validationStatus: true, helperText: "Publisher can not be empty" });
-    } else {
-      setInputPublisher({ publisher: event.target.value, validationStatus: false, helperText: "" });
-    }
-  };
-  const handleChangePublisherEmail = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.length == 0) {
-      setInputEmail({ email: "", validationStatus: true, helperText: "Information Email can not be empty" });
-    } else {
-      setInputEmail({ email: event.target.value, validationStatus: false, helperText: "" });
-    }
+  const handleChange = () => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsUserAnonym(event.target.checked);
+    setPublisher(event.target.checked ? "Anonym Publisher" : "John Wick");
   };
   function handleChangeFile(selectorFiles: FileList) {
-
     readableBytes(selectorFiles[0].name, selectorFiles[0].size);
     if (selectorFiles[0].size >= 10000000) {
       setMessage({ messageShow: true, messageTitle: "File size  can not be bigger than 10 MB!", messageType: "warning", messageText: "" })
@@ -83,20 +58,30 @@ const App: React.FC = () => {
       setDropzoneStatus("edit");
     }
   }
-  async function CreateTimeCapsule() {
-    let publisher;
-    let email;
-    var currentDate = new Date();
-    var date = startDate == null ? JSON.parse(JSON.stringify("null")) : startDate;
-    publisher = (document.getElementById("publisherInformation") as HTMLInputElement).value;
-    email = (document.getElementById("InformationEmail") as HTMLInputElement).value;
-    if (state.checkedB === false && !publisher) {
-      setMessage({ messageShow: true, messageTitle: "Publisher name can not be empty!", messageType: "warning", messageText: "" })
-    } else if (state.checkedB === false && !email) {
-      setMessage({ messageShow: true, messageTitle: "Information email can not be empty!", messageType: "warning", messageText: "" })
-    } else if (date == "null") {
+  function handleDateChange(param: Date | null) {
+    if (param) {
+      var inputDate = param == null ? JSON.parse(JSON.stringify("null")) : param;
+      setStartDate(inputDate);
+      setMessage({ messageShow: false, messageTitle: "", messageType: "", messageText: "" })
+    } else {
       setMessage({ messageShow: true, messageTitle: "Date can not be empty!", messageType: "warning", messageText: "" })
-    } else if (date <= currentDate) {
+    }
+  }
+  function handleTimeChange(param: Date | null) {
+    if (param) {
+      var inputDate = param == null ? JSON.parse(JSON.stringify("null")) : param;
+      setStartTime(inputDate);
+      setMessage({ messageShow: false, messageTitle: "", messageType: "", messageText: "" })
+    } else {
+      setMessage({ messageShow: true, messageTitle: "Time can not be empty!", messageType: "warning", messageText: "" })
+    }
+  }
+  async function CreateTimeCapsule() {
+    var currentDate = new Date();
+    var ChosenDate = new Date(startDate);
+    ChosenDate.setHours(startTime.getHours());
+    ChosenDate.setMinutes(startTime.getMinutes());
+    if (ChosenDate <= currentDate) {
       setMessage({ messageShow: true, messageTitle: "Date can not be smaller than current time!", messageType: "warning", messageText: "" })
     } else if (file.fileName == "") {
       setMessage({ messageShow: true, messageTitle: "File can not be empty,please choose a file!", messageType: "warning", messageText: "" })
@@ -146,123 +131,57 @@ const App: React.FC = () => {
       <div>
         <div className="time_capsule_block" >
           <Segment placeholder color="black"  >
-            <div style={{ display: state.checkedB === false ? 'block' : 'none' }}>
-              <div className="avatar-image" style={{ float: "left" }}>
-                <Image src={avatarTest} size='small' />
-              </div>
+            <div>
+
+              <Segment.Group>
+                <Segment.Group horizontal>
+                  <Segment><p style={{ marginTop: "2%" }}><strong>Publisher: </strong>{publisher}</p></Segment>
+                  <Segment>
+                    <div className="pickers-label">
+                      <strong>File Opening Date: </strong>
+                    </div>
+                    <DatePicker
+                      disabled={disabledStatus}
+                      selected={startDate}
+                      onChange={date => handleDateChange(date)}
+                      id="datePicker"
+                      locale="tr"
+                      todayButton="Today"
+                      dateFormat="d MMMM yyyy"
+                    />
+                  </Segment>
+                  <Segment>
+                    <div className="pickers-label">
+                      <strong>File Opening Time: </strong>
+                    </div>
+                    <DatePicker
+                      disabled={disabledStatus}
+                      selected={startTime}
+                      onChange={date => handleTimeChange(date)}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      id="timePicker"
+                      locale="tr"
+                      timeFormat="p"
+                      timeIntervals={1}
+                      timeCaption="Time"
+                      dateFormat="p"
+                    />
+                  </Segment>
+                </Segment.Group>
+                <Segment style={{ display: fileHash !== "" ? 'block' : 'none' }} className="hash-text">
+                  <strong>File Hash:</strong> {fileHash}</Segment>
+              </Segment.Group>
               <div style={{ float: "right", marginRight: "1%" }}>
                 <strong>Be Anonym:<Switch
-                  checked={state.checkedB}
+                  checked={isUserAnonym}
                   disabled={disabledStatus}
-                  onChange={handleChange('checkedB')}
+                  onChange={handleChange()}
                   value="checkedB"
                   color="primary"
                   inputProps={{ 'aria-label': 'primary checkbox' }}
                 /></strong>
               </div>
-              <div className="label-text" >
-                <div className="label-text-publisher">
-                  <TextField
-                    required
-                    disabled={disabledStatus}
-                    error={inputPublisher.validationStatus}
-                    id="publisherInformation"
-                    label="Publisher"
-                    defaultValue="John wick"
-                    onChange={handleChangePublisher('name')}
-                    margin="normal"
-                    helperText={inputPublisher.helperText}
-                  />
-                </div><br />
-                <div className="label-text-email">
-                  <TextField
-                    required
-                    disabled={disabledStatus}
-                    error={inputEmail.validationStatus}
-                    id="InformationEmail"
-                    label="Information Email"
-                    defaultValue="john@wick.com"
-                    onChange={handleChangePublisherEmail('name')}
-                    margin="normal"
-                    helperText={inputEmail.helperText}
-                  />
-                </div><br />
-              </div>
-              <div className="pickers-label">
-               <strong>Date: </strong>
-              </div>
-              <div className="pickers">
-                <DatePicker
-                  disabled={disabledStatus}
-                  selected={startDate}
-                  onChange={date => setStartDate(date)}
-                  showTimeSelect
-                  id="datePicker"
-                  locale="tr"
-                  timeFormat="p"
-                  timeIntervals={15}
-                  timeCaption="Time"
-                  todayButton="Today"
-                  dateFormat="d MMMM yyyy p  "
-                />
-              </div>
-              <div className="tooltip">
-                <Popup
-                  trigger={<Icon circular name='help' />}
-                  content="Date of opening to capsule."
-                  basic
-                />
-              </div>
-              <div className="file-label" style={{ display: fileHash !== "" ? 'block' : 'none' }}>
-                <strong>File Hash: </strong>
-              </div>
-              <p className="hash-text">{fileHash}</p>
-            </div>
-            <div style={{ display: state.checkedB === true ? 'block' : 'none' }}>
-              <div className="avatar-image" style={{ float: "left" }}>
-                <Image src={avatarAnonym} size='small' />
-              </div>
-              <div className="publisher-info-anonym">
-               <p style={{ marginTop: "2%" }}><strong>Publisher: </strong>Anonymous User</p>
-               <p className="email-anonym" style={{ marginTop: "5%" }}><strong>Information Email: </strong>Anonymous Email</p>
-              </div>
-              <div className="anonym-switch" style={{ float: "right", marginRight: "1%" }}>
-                <strong>Anonym:<Switch
-                  checked={state.checkedB}
-                  onChange={handleChange('checkedB')}
-                  value="checkedB"
-                  color="primary"
-                  inputProps={{ 'aria-label': 'primary checkbox' }}
-                /></strong>
-              </div>
-              <div className="pickers-label-anonym">
-                <strong>Date: </strong>
-              </div>
-              <div className="pickers-anonym">
-                <DatePicker
-                  selected={startDate}
-                  onChange={date => setStartDate(date)}
-                  showTimeSelect
-                  locale="tr"
-                  id="datePickerAnonym"
-                  timeFormat="HH:mm"
-                  timeIntervals={15}
-                  timeCaption="Time"
-                  todayButton="Today"
-                  dateFormat="d MMMM yyyy h:mm "
-                />
-              </div>
-              <div className="tooltip-anonym">
-                <Popup
-                  trigger={<Icon circular name='help' />}
-                  content="Date of opening to capsule."
-                  basic
-                />
-              </div>
-              <div className="file-label-anonym" style={{ display: fileHash !== "" ? 'block' : 'none' }}>
-                <strong>File Hash: </strong>
-              </div>
-              <p className="hash-text-anonym">{fileHash}</p>
             </div>
             <div className="line_crate" />
             <div style={{ display: dropzoneStatus === "upload" ? "block" : "none" }}>
@@ -271,8 +190,8 @@ const App: React.FC = () => {
             <div style={{ display: dropzoneStatus === "edit" ? "block" : "none" }}>
               <input style={{ float: "left", cursor: "pointer", width: "50%" }} className="file_upload_zone" type="file" onChange={(e: any) => handleChangeFile(e.target.files)} />
               <div style={{ float: "left", textAlign: "left", width: "50%", marginTop: "4%" }}>
-               <p><strong>File Name: </strong>{file.fileName}</p><br />
-               <p><strong>File Size: </strong>{file.fileSize}</p>
+                <p><strong>File Name: </strong>{file.fileName}</p><br />
+                <p><strong>File Size: </strong>{file.fileSize}</p>
               </div>
             </div>
             <div style={{ display: dropzoneStatus === "progress" ? "block" : "none" }}>

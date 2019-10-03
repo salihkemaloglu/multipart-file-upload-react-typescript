@@ -28,7 +28,7 @@ const AppList: React.FC = () => {
       if (damiData.length <= 0) {
         clearInterval(interval);
       };
-    }, 60000);
+    }, 600000);
   };
 
   document.addEventListener('DOMContentLoaded', (event) => {
@@ -99,45 +99,43 @@ const AppList: React.FC = () => {
                 <div className="avatar-image" style={{ float: "left" }}>
                   <Image src={avatarAnonym} size='small' />
                 </div>
-              </Segment>
-              <Segment style={{ width: "80%" }} stacked>
-                <div className="publisher-info-anonym">
+                <div className="publisher-info">
                   <p ><strong>Publisher: </strong>{publisherInfo[index].Publisher}</p>
-                  <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Name: </strong>{publisherInfo[index].FileName}</p>
-                  <p className="email-anonym" style={{ marginTop: "7%" }}><strong>File Hash: </strong>{publisherInfo[index].FileHash}</p>
+                  <p className="file-name" ><strong>File Name: </strong>{publisherInfo[index].FileName}</p>
                 </div>
-                <Label color="black" style={{ float: "right" }}>#{++count}</Label>
-                <Segment.Group horizontal>
-                  <Segment className="square">
-                    <Header as='h1'  >
-                      {addLeadingZeros(publisherInfo[index].RemaningDate[0].years)}
-                      <Header.Subheader >{publisherInfo[index].RemaningDate[0].years === 1 ? 'Year' : 'Years'}</Header.Subheader>
-                    </Header>
-                  </Segment>
-                  <Segment className="square">
-                    <Header as='h1'  >
-                      {addLeadingZeros(publisherInfo[index].RemaningDate[0].days)}
-                      <Header.Subheader >{publisherInfo[index].RemaningDate[0].days === 1 ? 'Day' : 'Days'}</Header.Subheader>
-                    </Header>
-                  </Segment>
-                  <Segment className="square">
-                    <Header as='h1' >
-                      {addLeadingZeros(publisherInfo[index].RemaningDate[0].hours)}
-                      <Header.Subheader>Hours</Header.Subheader>
-                    </Header>
-                  </Segment>
-                  <Segment className="square">
-                    <Header as='h1' >
-                      {addLeadingZeros(publisherInfo[index].RemaningDate[0].minutes)}
-                      <Header.Subheader>Minute</Header.Subheader>
-                    </Header>
-                  </Segment>
-                </Segment.Group>
-                <Label color='black'  style={{ float: "right" }}>{publisherInfo[index].UnitAmount}  <img src={unit} /></Label>
-                {/* <Label as='a' image color='black' style={{ float: "right" }}>
-                  <img src={unit} />
-                  {publisherInfo[index].UnitAmount}
-                </Label> */}
+                <div className="file-info">
+                  <p className="file-hash" ><strong>File Hash: </strong>{publisherInfo[index].FileHash}</p>
+                </div>
+                <div className="countdown-segment">
+                  <Label color="black" style={{ float: "right" }}>#{++count}</Label>
+                  <Segment.Group horizontal  className="countdown-itself">
+                    <Segment className="square" >
+                      <Header as='h1'  >
+                        {addLeadingZeros(publisherInfo[index].RemaningDate[0].years)}
+                        <Header.Subheader >{publisherInfo[index].RemaningDate[0].years === 1 ? 'Year' : 'Years'}</Header.Subheader>
+                      </Header>
+                    </Segment>
+                    <Segment className="square">
+                      <Header as='h1'  >
+                        {addLeadingZeros(publisherInfo[index].RemaningDate[0].days)}
+                        <Header.Subheader >{publisherInfo[index].RemaningDate[0].days === 1 ? 'Day' : 'Days'}</Header.Subheader>
+                      </Header>
+                    </Segment>
+                    <Segment className="square">
+                      <Header as='h1' >
+                        {addLeadingZeros(publisherInfo[index].RemaningDate[0].hours)}
+                        <Header.Subheader>Hours</Header.Subheader>
+                      </Header>
+                    </Segment>
+                    <Segment className="square">
+                      <Header as='h1' >
+                        {addLeadingZeros(publisherInfo[index].RemaningDate[0].minutes)}
+                        <Header.Subheader>Minute</Header.Subheader>
+                      </Header>
+                    </Segment>
+                  </Segment.Group>
+                  <Label color='black' style={{ float: "right" }}>{publisherInfo[index].UnitAmount}  <img src={unit} /></Label>
+                </div>
               </Segment>
             </Segment.Group>
           </Segment>

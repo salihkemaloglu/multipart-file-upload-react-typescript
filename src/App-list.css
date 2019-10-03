@@ -4,29 +4,61 @@
     float: left;
     width: 30%;
   }
-  .publisher-info-anonym {
+  .publisher-info {
+    float: left;
+    margin-top: 3%;
+    margin-left: 3%;
+    text-align: left;
+  }
+  .file-info {
     float: left;
     margin-top: 3%;
     margin-left: -3%;
     text-align: left;
   }
   .square {
-    width: 15px;
-    height: 15px;
+    width: 70px;
+    height: 70px;
+  }
+  .countdown-segment{
+    margin-top: 20%;
+  }
+  .countdown-itself{
+    width: 100%;
   }
 }
 
 /* Tablet Styles */
 @media only screen and (min-width: 401px) and (max-width: 960px) {
-  .publisher-info-anonym {
+  .publisher-info {
     float: left;
     margin-top: 3%;
-    margin-left: 2%;
+    margin-bottom: 2%;
     text-align: left;
+    margin-left: 1%;
+  }
+  .file-info {
+    float: left;
+    margin-top: 3%;
+    margin-bottom: 2%;
+    text-align: left;
+    margin-left: 1%;
   }
   .square {
     width: 100px;
     height: 100px;
+  }
+  .file-name {
+    margin-top: 2%;
+  }
+  .file-hash {
+    margin-top: 2%;
+  }
+  .countdown-segment{
+    margin-top: 23%;
+  }
+  .countdown-itself{
+    width: 100%;
   }
 }
 
@@ -37,14 +69,27 @@
     margin-left: 7%;
   }
 
-  .publisher-info-anonym {
+  .publisher-info {
     float: left;
-    margin-top: 3%;
+    margin-top: 2%;
+    margin-left: 1%;
+    text-align: left;
+  }
+  .file-info {
+    float: left;
+    margin-left: -143px;
+    margin-top: 9%;
     text-align: left;
   }
   .square {
     width: 100px;
     height: 100px;
+  }
+  .file-name {
+    margin-top: 7%;
+  }
+  .file-hash {
+    margin-top: 7%;
   }
 }
 .Countdown {
@@ -65,4 +110,7 @@
 
 .Countdown-col-element strong {
   font-size: 50px;
+}
+.file-hash {
+  word-break: break-all;
 }
