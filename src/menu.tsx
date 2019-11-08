@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Done from '@material-ui/icons/Done';
 import Cross from '@material-ui/icons/WarningOutlined';
-import { Dropdown, Flag, Label, Form, Message, Button, Progress } from 'semantic-ui-react';
+import { Label, Form, Message, Button, Progress, Input, Visibility, Header, Grid } from 'semantic-ui-react';
 import './menu.css';
 import { useState } from 'react';
-import { Container, Divider, Grid, Header, Image, List, Menu, Responsive, Segment, Sidebar, Icon } from 'semantic-ui-react'
+import { Container, Menu, Responsive, Segment, Sidebar, Icon } from 'semantic-ui-react'
 var logo = require('./unit.png');
 var logoGignox = require('./unit.png');
 const HomepageLayout: React.FC = () => {
@@ -21,10 +21,11 @@ const HomepageLayout: React.FC = () => {
     const [sidebarOpened, setsidebarOpened] = useState(false)
     const [loginScreenOpened, setloginScreenOpened] = useState(false)
     const [signupScreenOpened, setsignupScreenOpened] = useState(false)
-    const [activeMenu, setActiveMenu] = useState("home")
+    const [activeItem, setActiveItem] = useState("home")
     const [loginForm, setLoginForm] = useState("active")
     const [minHeight, setminHeight] = useState(35)
     const [backgroundColor, setbackgroundColor] = useState("black")
+    const [fixed, setFixed] = useState(false)
     let loginAttemptCount = 0;
     function sidebarScreenBack() {
         setloginScreenOpened(false)
@@ -76,6 +77,9 @@ const HomepageLayout: React.FC = () => {
     function Login() {
 
     }
+    function LogOut() {
+
+    }
 
     function Signup() {
         setLoader("loading");
@@ -104,61 +108,21 @@ const HomepageLayout: React.FC = () => {
         }
     }
 
-    var temp = true
     function scrollToElement(e: any) {
         var text = e.currentTarget.childNodes[0].data
-        var topBar = document.getElementById("topBar") as HTMLElement
         if (text == "Home") {
-            window.scrollTo(0, 0)
-            setActiveMenu("home")
-            topBar.style.width = '65%'
-            temp = false
+            setActiveItem("home")
         }
         else if (text == "About") {
-            window.scrollTo(0, window.innerHeight)
-            setActiveMenu("about")
-            topBar.style.width = '100%'
-            temp = false
+            setActiveItem("about")
         }
         else if (text == "Contact") {
-            window.scrollTo(0, 2 * window.innerHeight)
-            setActiveMenu("contact")
-            topBar.style.width = '100%'
-            temp = false
+            setActiveItem("contact")
         }
         else if (text == "Donation") {
-            window.scrollTo(0, 3 * window.innerHeight)
-            setActiveMenu("donation")
-            topBar.style.width = '100%'
-            temp = false
+            setActiveItem("donation")
         }
     }
-
-    window.addEventListener('scroll', (e: any) => {
-        if (temp == true) {
-            var topBar = document.getElementById("topBar") as HTMLElement
-            if (e.currentTarget.scrollX == 0 && e.currentTarget.scrollY <= window.innerHeight - 70) {
-                setActiveMenu("home")
-                topBar.style.width = '65%'
-            }
-            else if (e.currentTarget.scrollY > window.innerHeight - 70 && e.currentTarget.scrollY <= 2 * window.innerHeight - 70) {
-                setActiveMenu("about")
-                topBar.style.width = '100%'
-            }
-            else if (e.currentTarget.scrollY > 2 * window.innerHeight - 70 && e.currentTarget.scrollY <= 3 * window.innerHeight - 70) {
-                setActiveMenu("contact")
-                topBar.style.width = '100%'
-            }
-            else if (e.currentTarget.scrollY > 3 * window.innerHeight - 70 && e.currentTarget.scrollY <= 4 * window.innerHeight - 70) {
-                setActiveMenu("donation")
-                topBar.style.width = '100%'
-            }
-        }
-        else {
-            temp = false
-        }
-    })
-
     function test(type: boolean) {
         if (type) {
             setsidebarOpened(type)
@@ -180,16 +144,151 @@ const HomepageLayout: React.FC = () => {
             setloginScreenOpened(type)
         }
     }
+    function showFixedMenu() {
+        setFixed(true);
+    }
+    function hideFixedMenu() {
+        setFixed(false);
+    }
+    
+    window.addEventListener('scroll', (e: any) => {
+
+            if (e.currentTarget.scrollX == 0 && e.currentTarget.scrollY <= window.innerHeight - 70) {
+                setActiveItem("home")
+                setFixed(false)
+            }
+            else if (e.currentTarget.scrollY > window.innerHeight - 70 && e.currentTarget.scrollY <= 2 * window.innerHeight - 70) {
+                setActiveItem("about")
+                setFixed(true)
+            }
+            else if (e.currentTarget.scrollY > 2 * window.innerHeight - 70 && e.currentTarget.scrollY <= 3 * window.innerHeight - 70) {
+                setActiveItem("contact")
+                setFixed(true)
+            }
+            else if (e.currentTarget.scrollY > 3 * window.innerHeight - 70 && e.currentTarget.scrollY <= 4 * window.innerHeight - 70) {
+                setActiveItem("donation")
+                setFixed(true)
+            }
+
+    })
+
+    const HomepageHeading = () => {
+        return (<Container text>
+            <Header as='h1' content='Imagine-a-Company' inverted style={{
+                fontSize: getWidth ? '2em' : '4em',
+                fontWeight: 'normal',
+                marginBottom: 0,
+                marginTop: getWidth ? '1.5em' : '3em',
+            }} />
+            <Header as='h2' content='Do whatever you want when you want to.' inverted style={{
+                fontSize: getWidth ? '1.5em' : '1.7em',
+                fontWeight: 'normal',
+                marginTop: getWidth ? '0.5em' : '1.5em',
+            }} />
+            <Button primary size='huge'>
+                Get Started
+                <Icon name="code" />
+            </Button>
+            <Segment style={{ padding: '8em 0em' }} vertical>
+                <Grid container stackable verticalAlign='middle'>
+                    <Grid.Row>
+                        <Grid.Column width={8}>
+                            <Header as='h3' style={{ fontSize: '2em' }}>
+                                We Help Companies and Companions
+            </Header>
+                            <p style={{ fontSize: '1.33em' }}>
+                                We can give your company superpowers to do things that they never thought possible.
+                                Let us delight your customers and empower your needs... through pure data analytics.
+            </p>
+                            <Header as='h3' style={{ fontSize: '2em' }}>
+                                We Make Bananas That Can Dance
+            </Header>
+                            <p style={{ fontSize: '1.33em' }}>
+                                Yes that's right, you thought it was the stuff of dreams, but even bananas can be
+                                bioengineered.
+            </p>
+                        </Grid.Column>
+                        <Grid.Column floated='right' width={6}>
+                            {/* <Image bordered rounded size='large' src='/images/wireframe/white-image.png' /> */}
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column textAlign='center'>
+                            <Button size='huge'>Check Them Out</Button>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Segment>
+            <Segment style={{ padding: '8em 0em' }} vertical>
+                <Grid container stackable verticalAlign='middle'>
+                    <Grid.Row>
+                        <Grid.Column width={8}>
+                            <Header as='h3' style={{ fontSize: '2em' }}>
+                                We Help Companies and Companions
+            </Header>
+                            <p style={{ fontSize: '1.33em' }}>
+                                We can give your company superpowers to do things that they never thought possible.
+                                Let us delight your customers and empower your needs... through pure data analytics.
+            </p>
+                            <Header as='h3' style={{ fontSize: '2em' }}>
+                                We Make Bananas That Can Dance
+            </Header>
+                            <p style={{ fontSize: '1.33em' }}>
+                                Yes that's right, you thought it was the stuff of dreams, but even bananas can be
+                                bioengineered.
+            </p>
+                        </Grid.Column>
+                        <Grid.Column floated='right' width={6}>
+                            {/* <Image bordered rounded size='large' src='/images/wireframe/white-image.png' /> */}
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column textAlign='center'>
+                            <Button size='huge'>Check Them Out</Button>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Segment>
+            <Segment style={{ padding: '8em 0em' }} vertical>
+                <Grid container stackable verticalAlign='middle'>
+                    <Grid.Row>
+                        <Grid.Column width={8}>
+                            <Header as='h3' style={{ fontSize: '2em' }}>
+                                We Help Companies and Companions
+            </Header>
+                            <p style={{ fontSize: '1.33em' }}>
+                                We can give your company superpowers to do things that they never thought possible.
+                                Let us delight your customers and empower your needs... through pure data analytics.
+            </p>
+                            <Header as='h3' style={{ fontSize: '2em' }}>
+                                We Make Bananas That Can Dance
+            </Header>
+                            <p style={{ fontSize: '1.33em' }}>
+                                Yes that's right, you thought it was the stuff of dreams, but even bananas can be
+                                bioengineered.
+            </p>
+                        </Grid.Column>
+                        <Grid.Column floated='right' width={6}>
+                            {/* <Image bordered rounded size='large' src='/images/wireframe/white-image.png' /> */}
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column textAlign='center'>
+                            <Button size='huge'>Check Them Out</Button>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Segment>
+        </Container>);
+    }
+
     return (
         <div className="wrap">
-            <section className="navSection Logos" id="topBar" style={{ backgroundColor: 'black', width: '100%', position: 'fixed', zIndex: 1000 }}>
-
-                <Segment
-                    textAlign='center'
-                    vertical
-                    style={{ padding: '0' }}
-                >
-                    <Menu size='small' inverted borderless>
+            {/* <section className="navSection Logos" id="topBar" style={{ backgroundColor: 'black', width: '100%', position: 'fixed', zIndex: 1000 }}>
+                <Segment  
+                    inverted
+                    style={{ padding: '0' }}>
+                    <Menu size='small' inverted secondary pointing>
                         <Menu.Item as='div'>
                             <a href="/" className="logo_link">
                                 <img src={logo} className="authentication-app-logo" alt="logo" />
@@ -197,21 +296,100 @@ const HomepageLayout: React.FC = () => {
                             </a>
                         </Menu.Item>
                         <Menu.Item as='div' borderless style={{ left: '50px' }}>
-                            <Menu.Item as='a' className={activeMenu == "home" ? "activeMenu" : ""} onClick={(e) => scrollToElement(e)} style={{ color: 'white' }}>Home</Menu.Item>
-                            <Menu.Item as='a' className={activeMenu == "about" ? "activeMenu" : ""} onClick={(e) => scrollToElement(e)} style={{ color: 'white' }}>About</Menu.Item>
-                            <Menu.Item as='a' className={activeMenu == "contact" ? "activeMenu" : ""} onClick={(e) => scrollToElement(e)} style={{ color: 'white' }}>Contact</Menu.Item>
-                            <Menu.Item as='a' className={activeMenu == "donation" ? "activeMenu" : ""} onClick={(e) => scrollToElement(e)} style={{ color: 'white' }}>Donation</Menu.Item>
+                            <Menu.Item active={activeItem === 'home'} onClick={(e) => scrollToElement(e)} >Home</Menu.Item>
+                            <Menu.Item active={activeItem === 'about'}  onClick={(e) => scrollToElement(e)} >About</Menu.Item>
+                            <Menu.Item active={activeItem === 'contact'}   onClick={(e) => scrollToElement(e)} >Contact</Menu.Item>
+                            <Menu.Item active={activeItem === 'donation'}  onClick={(e) => scrollToElement(e)} >Donation</Menu.Item>
                         </Menu.Item>
+                        <Button as='a' inverted={true}>
+                                Log in
+                             </Button>
+                        <Menu.Menu position='right'>
+                            <Menu.Item>
+                                <Input icon='search' placeholder='Search...' />
+                            </Menu.Item>
+                            <Button as='a' inverted={true}>
+                                Log in
+                             </Button>
+                            <Button as='a' inverted={true} primary={false} style={{ marginLeft: '0.5em' }}>
+                                Sign Up
+                            </Button>
+                        </Menu.Menu>
+
                     </Menu>
                 </Segment>
-
-            </section>
+            </section> */}
+            <Responsive getWidth={() => (getWidth ? window.innerWidth : 0)} minWidth={Responsive.onlyTablet.minWidth}>
+                <Visibility
+                    once={false}
+                    onBottomPassed={showFixedMenu}
+                    onBottomPassedReverse={hideFixedMenu}
+                >
+                    <Segment
+                        inverted
+                        textAlign='center'
+                        style={{ padding: '1em 0em' }}
+                        vertical
+                    >
+                        <Menu
+                            fixed={fixed ? 'top' : undefined}
+                            inverted={!fixed}
+                            pointing={!fixed}
+                            secondary={!fixed}
+                            size='large'
+                        >
+                            <Menu.Item as='div'>
+                                <a href="/" className="logo_link">
+                                    {/* <img src={logo} className="authentication-app-logo" alt="logo" />
+                                <img src={logoGignox} className="authentication_logo_word" alt="logo" /> */}
+                                </a>
+                            </Menu.Item>
+                            <Container>
+                                <Menu.Item active={activeItem === 'home'} onClick={(e) => scrollToElement(e)} >Home</Menu.Item>
+                                <Menu.Item active={activeItem === 'about'} onClick={(e) => scrollToElement(e)} >About</Menu.Item>
+                                <Menu.Item active={activeItem === 'contact'} onClick={(e) => scrollToElement(e)} >Contact</Menu.Item>
+                                <Menu.Item active={activeItem === 'donation'} onClick={(e) => scrollToElement(e)} >Donation</Menu.Item>
+                                <Menu.Item position='right'>
+                                    <Button as='a' inverted={!fixed}>
+                                        Log in
+                  </Button>
+                                    <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
+                                        Sign Up
+                  </Button>
+                                </Menu.Item>
+                            </Container>
+                        </Menu>
+                        <HomepageHeading />
+                    </Segment>
+                </Visibility>
+            </Responsive>
             <Responsive
                 as={Sidebar.Pushable}
                 getWidth={() => (getWidth ? window.innerWidth : 0)}
                 maxWidth={Responsive.onlyTablet.maxWidth}
-                style={{ backgroundColor: 'black', width: '100%' }}
-            >
+                style={{ backgroundColor: 'black', width: '100%' }}>
+
+                <Sidebar.Pusher dimmed={sidebarOpened}>
+                    <Segment
+                        inverted
+                        textAlign='center'
+                        style={{ backgroundColor: backgroundColor, minHeight: minHeight, padding: '1em 0em' }}
+                        vertical>
+                        <Container>
+                            <Menu inverted pointing secondary size='large'>
+                                <Menu.Item style={{ marginLeft: '0', width: '240px' }}>
+                                    <a href="/" className="logo_link" style={{ display: 'inherit' }}>
+                                        <img src={logo} className="authentication-app-logo" alt="logo" />
+                                        <img src={logoGignox} className="authentication_logo_word" alt="logo" style={{ height: '30px', marginTop: '5px' }} />
+                                    </a>
+                                </Menu.Item>
+                                <Menu.Item onClick={() => test(true)} style={{ marginBottom: '10px', fontSize: '23px', marginLeft: 'auto' }}>
+                                    <Icon name='sidebar' />
+                                </Menu.Item>
+                            </Menu>
+                        </Container>
+                    </Segment>
+                </Sidebar.Pusher>
                 <Sidebar
                     as={Menu}
                     animation='push'
@@ -219,8 +397,7 @@ const HomepageLayout: React.FC = () => {
                     onHide={() => test(false)}
                     vertical
                     visible={sidebarOpened}
-                    style={{ backgroundColor: "black"}}
-                >
+                    style={{ backgroundColor: "black" }}>
                     <a href="/" className="logo_link" style={{ display: 'inherit' }}>
                         <img src={logo} className="authentication-app-logo" alt="logo" />
                         <img src={logoGignox} className="authentication_logo_word" alt="logo" />
@@ -229,7 +406,6 @@ const HomepageLayout: React.FC = () => {
                     <Menu.Item as='a' onClick={() => testAuth(true)}>Sign Up</Menu.Item>
                 </Sidebar>
 
-
                 {/******* Login screen **********/}
                 <Sidebar
                     as={Menu}
@@ -237,10 +413,8 @@ const HomepageLayout: React.FC = () => {
                     inverted
                     onHide={() => testAuth(false)}
                     vertical
-
                     visible={loginScreenOpened}
-                    style={{ backgroundColor: 'white', width: '100%' }}
-                >
+                    style={{ backgroundColor: 'white', width: '100%' }}>
 
                     <Menu.Item as='a' style={{ marginBottom: '10px', paddingBottom: '15px', backgroundColor: '#2B2F43', minHeight: '50px' }} onClick={sidebarScreenBack}><Icon name='chevron circle left' style={{ color: 'white', float: 'left', fontSize: '25px' }} /></Menu.Item>
                     <Menu.Item as='a'>
@@ -271,10 +445,10 @@ const HomepageLayout: React.FC = () => {
                                 </div>
                                 <Button type="button" fluid size='large' style={{ display: loader === "active" ? 'block' : 'none', backgroundColor: 'rgb(23, 162, 184)', color: 'white' }} onClick={Login} >
                                     "authentication_page_sign_in")}
-                </Button>
+                                </Button>
                                 <Button loading fluid disabled style={{ display: loader === "loading" ? 'block' : 'none', backgroundColor: 'rgb(23, 162, 184)', color: 'white' }} color='teal'>
                                     Loading
-                </Button>
+                                </Button>
                                 <div className="login-need-help"><a href="password_reset" className="forgot-password-link">
                                     "authentication_page_forgot_password")}</a></div>
                             </form>
@@ -292,8 +466,7 @@ const HomepageLayout: React.FC = () => {
                     onHide={() => testAuth(false)}
                     vertical
                     visible={signupScreenOpened}
-                    style={{ backgroundColor: 'white', width: '100%' }}
-                >
+                    style={{ backgroundColor: 'white', width: '100%' }}>
                     <Menu.Item as='a' style={{ marginBottom: '10px', paddingBottom: '15px', backgroundColor: '#2B2F43', minHeight: '50px' }} onClick={sidebarScreenBack}><Icon name='chevron circle left' style={{ color: 'white', float: 'left', fontSize: '25px' }} /></Menu.Item>
 
                     <Menu.Item as='a'>
@@ -343,41 +516,14 @@ const HomepageLayout: React.FC = () => {
                                 </div>
                                 <Button type="button" fluid size='large' style={{ display: loader === "active" ? 'block' : 'none', backgroundColor: 'rgb(23, 162, 184)', color: 'white' }} onClick={Signup} >
                                     "authentication_page_sign_up")}
-                </Button>
+                                </Button>
                                 <Button loading fluid disabled style={{ display: loader === "loading" ? 'block' : 'none', backgroundColor: 'rgb(23, 162, 184)', color: 'white' }} color='teal'>
                                     Loading
-                </Button>
+                                </Button>
                             </form>
                         </div>
                     </Menu.Item>
                 </Sidebar>
-
-                <Sidebar.Pusher dimmed={sidebarOpened}>
-                    <Segment
-                        inverted
-                        textAlign='center'
-                        style={{backgroundColor: backgroundColor, minHeight: minHeight, padding: '1em 0em' }}
-                        vertical
-                    >
-                        <Container>
-                            <Menu inverted pointing secondary size='large'>
-                                <Menu.Item style={{ marginLeft: '0', width: '240px' }}>
-                                    <a href="/" className="logo_link" style={{ display: 'inherit' }}>
-                                        <img src={logo} className="authentication-app-logo" alt="logo" />
-                                        <img src={logoGignox} className="authentication_logo_word" alt="logo" style={{ height: '30px', marginTop: '5px' }} />
-                                    </a>
-                                </Menu.Item>
-                                <Menu.Item onClick={() => test(true)} style={{ marginBottom: '10px', fontSize: '23px', marginLeft: 'auto' }}>
-                                    <Icon name='sidebar' />
-                                </Menu.Item>
-                            </Menu>
-                        </Container>
-                    </Segment>
-
-
-
-
-                </Sidebar.Pusher>
             </Responsive>
         </div>
     );
