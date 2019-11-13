@@ -1,10 +1,9 @@
 import * as React from 'react';
 import Done from '@material-ui/icons/Done';
 import Cross from '@material-ui/icons/WarningOutlined';
-import { Label, Form, Message, Button, Progress, Input, Visibility, Header, Grid } from 'semantic-ui-react';
+import { Label, Form, Message, Button, Progress, Input, Visibility, Header, Grid, List, Image, Container, Menu, Responsive, Segment, Sidebar, Icon, Divider } from 'semantic-ui-react';
 import './menu.css';
 import { useState } from 'react';
-import { Container, Menu, Responsive, Segment, Sidebar, Icon } from 'semantic-ui-react'
 var logo = require('./unit.png');
 var logoGignox = require('./unit.png');
 const HomepageLayout: React.FC = () => {
@@ -150,175 +149,193 @@ const HomepageLayout: React.FC = () => {
     function hideFixedMenu() {
         setFixed(false);
     }
-    
+
     window.addEventListener('scroll', (e: any) => {
 
-            if (e.currentTarget.scrollX == 0 && e.currentTarget.scrollY <= window.innerHeight - 70) {
-                setActiveItem("home")
-                setFixed(false)
-            }
-            else if (e.currentTarget.scrollY > window.innerHeight - 70 && e.currentTarget.scrollY <= 2 * window.innerHeight - 70) {
-                setActiveItem("about")
-                setFixed(true)
-            }
-            else if (e.currentTarget.scrollY > 2 * window.innerHeight - 70 && e.currentTarget.scrollY <= 3 * window.innerHeight - 70) {
-                setActiveItem("contact")
-                setFixed(true)
-            }
-            else if (e.currentTarget.scrollY > 3 * window.innerHeight - 70 && e.currentTarget.scrollY <= 4 * window.innerHeight - 70) {
-                setActiveItem("donation")
-                setFixed(true)
-            }
+        if (e.currentTarget.scrollX == 0 && e.currentTarget.scrollY <= window.innerHeight - 70) {
+            setActiveItem("home")
+            setFixed(false)
+        }
+        else if (e.currentTarget.scrollY > window.innerHeight - 70 && e.currentTarget.scrollY <= 2 * window.innerHeight - 70) {
+            setActiveItem("about")
+            setFixed(true)
+        }
+        else if (e.currentTarget.scrollY > 2 * window.innerHeight - 70 && e.currentTarget.scrollY <= 3 * window.innerHeight - 70) {
+            setActiveItem("contact")
+            setFixed(true)
+        }
+        else if (e.currentTarget.scrollY > 3 * window.innerHeight - 70 && e.currentTarget.scrollY <= 4 * window.innerHeight - 70) {
+            setActiveItem("donation")
+            setFixed(true)
+        }
 
     })
-
     const HomepageHeading = () => {
-        return (<Container text>
-            <Header as='h1' content='Imagine-a-Company' inverted style={{
-                fontSize: getWidth ? '2em' : '4em',
-                fontWeight: 'normal',
-                marginBottom: 0,
-                marginTop: getWidth ? '1.5em' : '3em',
-            }} />
-            <Header as='h2' content='Do whatever you want when you want to.' inverted style={{
-                fontSize: getWidth ? '1.5em' : '1.7em',
-                fontWeight: 'normal',
-                marginTop: getWidth ? '0.5em' : '1.5em',
-            }} />
-            <Button primary size='huge'>
-                Get Started
-                <Icon name="code" />
-            </Button>
-            <Segment style={{ padding: '8em 0em' }} vertical>
-                <Grid container stackable verticalAlign='middle'>
-                    <Grid.Row>
-                        <Grid.Column width={8}>
-                            <Header as='h3' style={{ fontSize: '2em' }}>
-                                We Help Companies and Companions
-            </Header>
-                            <p style={{ fontSize: '1.33em' }}>
-                                We can give your company superpowers to do things that they never thought possible.
-                                Let us delight your customers and empower your needs... through pure data analytics.
-            </p>
-                            <Header as='h3' style={{ fontSize: '2em' }}>
-                                We Make Bananas That Can Dance
-            </Header>
-                            <p style={{ fontSize: '1.33em' }}>
-                                Yes that's right, you thought it was the stuff of dreams, but even bananas can be
-                                bioengineered.
-            </p>
-                        </Grid.Column>
-                        <Grid.Column floated='right' width={6}>
-                            {/* <Image bordered rounded size='large' src='/images/wireframe/white-image.png' /> */}
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column textAlign='center'>
-                            <Button size='huge'>Check Them Out</Button>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Segment>
-            <Segment style={{ padding: '8em 0em' }} vertical>
-                <Grid container stackable verticalAlign='middle'>
-                    <Grid.Row>
-                        <Grid.Column width={8}>
-                            <Header as='h3' style={{ fontSize: '2em' }}>
-                                We Help Companies and Companions
-            </Header>
-                            <p style={{ fontSize: '1.33em' }}>
-                                We can give your company superpowers to do things that they never thought possible.
-                                Let us delight your customers and empower your needs... through pure data analytics.
-            </p>
-                            <Header as='h3' style={{ fontSize: '2em' }}>
-                                We Make Bananas That Can Dance
-            </Header>
-                            <p style={{ fontSize: '1.33em' }}>
-                                Yes that's right, you thought it was the stuff of dreams, but even bananas can be
-                                bioengineered.
-            </p>
-                        </Grid.Column>
-                        <Grid.Column floated='right' width={6}>
-                            {/* <Image bordered rounded size='large' src='/images/wireframe/white-image.png' /> */}
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column textAlign='center'>
-                            <Button size='huge'>Check Them Out</Button>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Segment>
-            <Segment style={{ padding: '8em 0em' }} vertical>
-                <Grid container stackable verticalAlign='middle'>
-                    <Grid.Row>
-                        <Grid.Column width={8}>
-                            <Header as='h3' style={{ fontSize: '2em' }}>
-                                We Help Companies and Companions
-            </Header>
-                            <p style={{ fontSize: '1.33em' }}>
-                                We can give your company superpowers to do things that they never thought possible.
-                                Let us delight your customers and empower your needs... through pure data analytics.
-            </p>
-                            <Header as='h3' style={{ fontSize: '2em' }}>
-                                We Make Bananas That Can Dance
-            </Header>
-                            <p style={{ fontSize: '1.33em' }}>
-                                Yes that's right, you thought it was the stuff of dreams, but even bananas can be
-                                bioengineered.
-            </p>
-                        </Grid.Column>
-                        <Grid.Column floated='right' width={6}>
-                            {/* <Image bordered rounded size='large' src='/images/wireframe/white-image.png' /> */}
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column textAlign='center'>
-                            <Button size='huge'>Check Them Out</Button>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Segment>
-        </Container>);
+        return (
+            < Container text
+                /*************** HomepageHeading ******************/
+                style={{ width: '100%' }
+                }>
+                <Header
+                    as='h1'
+                    content='Imagine-a-Company'
+                    inverted
+                    style={{
+                        fontSize: '2em',
+                        fontWeight: 'normal',
+                        marginBottom: 0,
+                        marginTop: '1.5em',
+                    }}
+                />
+                <Header
+                    as='h2'
+                    content='Do whatever you want when you want to.'
+                    inverted
+                    style={{
+                        fontSize: '1.5em',
+                        fontWeight: 'normal',
+                        marginTop: '0.5em',
+                    }}
+                />
+                <Button primary size='huge'>
+                    Get Started
+                </Button>
+            </Container >
+
+        )
+    }
+    const HomepageSections = () => {
+        return (
+            <Container
+                style={{ backgroundColor: 'white', width: '100%' }}>
+                {/*************** children ******************/}
+                <Segment style={{ padding: '8em 0em' }} vertical>
+                    <Grid container stackable verticalAlign='middle'>
+                        <Grid.Row>
+                            <Grid.Column width={8}>
+                                <Header as='h3' style={{ fontSize: '2em' }}>
+                                    We Help Companies and Companions
+</Header>
+                                <p style={{ fontSize: '1.33em' }}>
+                                    We can give your company superpowers to do things that they never thought possible.
+                                    Let us delight your customers and empower your needs... through pure data analytics.
+</p>
+                                <Header as='h3' style={{ fontSize: '2em' }}>
+                                    We Make Bananas That Can Dance
+</Header>
+                                <p style={{ fontSize: '1.33em' }}>
+                                    Yes that's right, you thought it was the stuff of dreams, but even bananas can be
+                                    bioengineered.
+</p>
+                            </Grid.Column>
+                            <Grid.Column floated='right' width={6}>
+                                <img src={logo} className="authentication-app-logo" alt="logo" />
+
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column textAlign='center'>
+                                <Button size='huge'>Check Them Out</Button>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </Segment>
+                <Segment style={{ padding: '0em' }} vertical>
+                    <Grid celled='internally' columns='equal' stackable>
+                        <Grid.Row textAlign='center'>
+                            <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
+                                <Header as='h3' style={{ fontSize: '2em' }}>
+                                    "What a Company"
+</Header>
+                                <p style={{ fontSize: '1.33em' }}>That is what they all say about us</p>
+                            </Grid.Column>
+                            <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
+                                <Header as='h3' style={{ fontSize: '2em' }}>
+                                    "I shouldn't have gone with their competitor."
+</Header>
+                                <p style={{ fontSize: '1.33em' }}>
+                                    <img src={logo} className="authentication-app-logo" alt="logo" />
+
+                                    <b>Nan</b> Chief Fun Officer Acme Toys
+</p>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </Segment>
+                <Segment style={{ padding: '8em 0em' }} vertical>
+                    <Container text>
+                        <Header as='h3' style={{ fontSize: '2em' }}>
+                            Breaking The Grid, Grabs Your Attention
+</Header>
+                        <p style={{ fontSize: '1.33em' }}>
+                            Instead of focusing on content creation and hard work, we have learned how to master the
+                            art of doing nothing by providing massive amounts of whitespace and generic content that
+                            can seem massive, monolithic and worth your attention.
+</p>
+                        <Button as='a' size='large'>
+                            Read More
+</Button>
+                        <Divider
+                            as='h4'
+                            className='header'
+                            horizontal
+                            style={{ margin: '3em 0em', textTransform: 'uppercase' }}
+                        >
+                            <a href='#'>Case Studies</a>
+                        </Divider>
+                        <Header as='h3' style={{ fontSize: '2em' }}>
+                            Did We Tell You About Our Bananas?
+</Header>
+                        <p style={{ fontSize: '1.33em' }}>
+                            Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but
+                            it's really true. It took years of gene splicing and combinatory DNA research, but our
+                            bananas can really dance.
+</p>
+                        <Button as='a' size='large'>
+                            I'm Still Quite Interested
+</Button>
+                    </Container>
+                </Segment>
+                <Segment inverted vertical style={{ padding: '5em 0em' }}>
+                    <Container>
+                        <Grid divided inverted stackable>
+                            <Grid.Row>
+                                <Grid.Column width={3}>
+                                    <Header inverted as='h4' content='About' />
+                                    <List link inverted>
+                                        <List.Item as='a'>Sitemap</List.Item>
+                                        <List.Item as='a'>Contact Us</List.Item>
+                                        <List.Item as='a'>Religious Ceremonies</List.Item>
+                                        <List.Item as='a'>Gazebo Plans</List.Item>
+                                    </List>
+                                </Grid.Column>
+                                <Grid.Column width={3}>
+                                    <Header inverted as='h4' content='Services' />
+                                    <List link inverted>
+                                        <List.Item as='a'>Banana Pre-Order</List.Item>
+                                        <List.Item as='a'>DNA FAQ</List.Item>
+                                        <List.Item as='a'>How To Access</List.Item>
+                                        <List.Item as='a'>Favorite X-Men</List.Item>
+                                    </List>
+                                </Grid.Column>
+                                <Grid.Column width={7}>
+                                    <Header as='h4' inverted>
+                                        Footer Header
+</Header>
+                                    <p>
+                                        Extra space for a call to action inside the footer that could help re-engage users.
+</p>
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Container>
+                </Segment>
+                {/*************** /children ******************/}
+            </Container>);
     }
 
     return (
         <div className="wrap">
-            {/* <section className="navSection Logos" id="topBar" style={{ backgroundColor: 'black', width: '100%', position: 'fixed', zIndex: 1000 }}>
-                <Segment  
-                    inverted
-                    style={{ padding: '0' }}>
-                    <Menu size='small' inverted secondary pointing>
-                        <Menu.Item as='div'>
-                            <a href="/" className="logo_link">
-                                <img src={logo} className="authentication-app-logo" alt="logo" />
-                                <img src={logoGignox} className="authentication_logo_word" alt="logo" />
-                            </a>
-                        </Menu.Item>
-                        <Menu.Item as='div' borderless style={{ left: '50px' }}>
-                            <Menu.Item active={activeItem === 'home'} onClick={(e) => scrollToElement(e)} >Home</Menu.Item>
-                            <Menu.Item active={activeItem === 'about'}  onClick={(e) => scrollToElement(e)} >About</Menu.Item>
-                            <Menu.Item active={activeItem === 'contact'}   onClick={(e) => scrollToElement(e)} >Contact</Menu.Item>
-                            <Menu.Item active={activeItem === 'donation'}  onClick={(e) => scrollToElement(e)} >Donation</Menu.Item>
-                        </Menu.Item>
-                        <Button as='a' inverted={true}>
-                                Log in
-                             </Button>
-                        <Menu.Menu position='right'>
-                            <Menu.Item>
-                                <Input icon='search' placeholder='Search...' />
-                            </Menu.Item>
-                            <Button as='a' inverted={true}>
-                                Log in
-                             </Button>
-                            <Button as='a' inverted={true} primary={false} style={{ marginLeft: '0.5em' }}>
-                                Sign Up
-                            </Button>
-                        </Menu.Menu>
-
-                    </Menu>
-                </Segment>
-            </section> */}
             <Responsive getWidth={() => (getWidth ? window.innerWidth : 0)} minWidth={Responsive.onlyTablet.minWidth}>
                 <Visibility
                     once={false}
@@ -328,7 +345,7 @@ const HomepageLayout: React.FC = () => {
                     <Segment
                         inverted
                         textAlign='center'
-                        style={{ padding: '1em 0em' }}
+                        style={{ minHeight: 700, padding: '1em 0em' }}
                         vertical
                     >
                         <Menu
@@ -340,8 +357,8 @@ const HomepageLayout: React.FC = () => {
                         >
                             <Menu.Item as='div'>
                                 <a href="/" className="logo_link">
-                                    {/* <img src={logo} className="authentication-app-logo" alt="logo" />
-                                <img src={logoGignox} className="authentication_logo_word" alt="logo" /> */}
+                                    <img src={logo} className="authentication-app-logo" alt="logo" />
+                                    <img src={logoGignox} className="authentication_logo_word" alt="logo" />
                                 </a>
                             </Menu.Item>
                             <Container>
@@ -349,18 +366,21 @@ const HomepageLayout: React.FC = () => {
                                 <Menu.Item active={activeItem === 'about'} onClick={(e) => scrollToElement(e)} >About</Menu.Item>
                                 <Menu.Item active={activeItem === 'contact'} onClick={(e) => scrollToElement(e)} >Contact</Menu.Item>
                                 <Menu.Item active={activeItem === 'donation'} onClick={(e) => scrollToElement(e)} >Donation</Menu.Item>
-                                <Menu.Item position='right'>
-                                    <Button as='a' inverted={!fixed}>
-                                        Log in
-                  </Button>
-                                    <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
-                                        Sign Up
-                  </Button>
-                                </Menu.Item>
+                                <Menu.Menu position='right'>
+                                    <Menu.Item>
+                                        <Input icon='search' placeholder='Search...' />
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <Button as='a' inverted={!fixed}>Log in</Button>
+                                        <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>Sign Up</Button>
+                                    </Menu.Item>
+                                </Menu.Menu>
                             </Container>
                         </Menu>
                         <HomepageHeading />
+
                     </Segment>
+                    <HomepageSections />
                 </Visibility>
             </Responsive>
             <Responsive
@@ -373,7 +393,7 @@ const HomepageLayout: React.FC = () => {
                     <Segment
                         inverted
                         textAlign='center'
-                        style={{ backgroundColor: backgroundColor, minHeight: minHeight, padding: '1em 0em' }}
+                        style={{ backgroundColor: backgroundColor, minHeight: minHeight, padding: '1em 0em', }}
                         vertical>
                         <Container>
                             <Menu inverted pointing secondary size='large'>
@@ -388,7 +408,9 @@ const HomepageLayout: React.FC = () => {
                                 </Menu.Item>
                             </Menu>
                         </Container>
+                        <HomepageHeading />
                     </Segment>
+                    <HomepageSections />
                 </Sidebar.Pusher>
                 <Sidebar
                     as={Menu}
@@ -404,6 +426,9 @@ const HomepageLayout: React.FC = () => {
                     </a>
                     <Menu.Item as='a' onClick={() => testAuth(true)}>Sign in</Menu.Item>
                     <Menu.Item as='a' onClick={() => testAuth(true)}>Sign Up</Menu.Item>
+                    <Menu.Item>
+                        <Input icon='search' placeholder='Search...' />
+                    </Menu.Item>
                 </Sidebar>
 
                 {/******* Login screen **********/}
